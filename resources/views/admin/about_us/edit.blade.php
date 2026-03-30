@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Edit Tentang Kami</title>
+    <title>KSPM SV IPB</title>
 </head>
 <body>
     <h2>Pengaturan Halaman Tentang Kami (KSPM)</h2>

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Edit Header</title>
+    <title>KSPM SV IPB</title>
 </head>
 <body>
     <h2>Pengaturan Header / Hero Section</h2>
