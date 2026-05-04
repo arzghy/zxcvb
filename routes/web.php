@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\DashboardController; // <-- tambahkan ini
 
 Route::get('/', function () {
     return view('welcome');
@@ -8,7 +9,7 @@ Route::get('/', function () {
 
 Route::prefix('admin')->group(function () {
     // Overview
-    Route::get('/dashboard', function () { return view('admin.dashboard'); })->name('admin.dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard'); // <-- ubah ini
     Route::get('/analitik', function () { return view('admin.analitik'); })->name('admin.analitik');
 
     // Konten & Data
@@ -17,7 +18,7 @@ Route::prefix('admin')->group(function () {
     Route::get('/lomba', function () { return view('admin.lomba'); })->name('admin.lomba');
     Route::get('/riset', function () { return view('admin.riset'); })->name('admin.riset');
     Route::get('/pengumuman', function () { return view('admin.pengumuman'); })->name('admin.pengumuman');
-    
+
     // Fitur Esensial
     Route::get('/faq', function () { return view('admin.faq'); })->name('admin.faq');
     Route::get('/reviews', function () { return view('admin.reviews'); })->name('admin.reviews');
