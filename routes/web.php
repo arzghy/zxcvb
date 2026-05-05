@@ -1,43 +1,66 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\AdminAuthController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\AnalitikController;
 use App\Http\Controllers\Admin\AnggotaController;
 
 Route::get('/', function () {
-    return view('welcome');
+    $header = \App\Models\Header::first();
+    return view('welcome', compact('header'));
 });
 
-Route::prefix('admin')->group(function () {
+// ============================================================
+// ADMIN AUTH ROUTES (tidak butuh login)
+// ============================================================
+Route::prefix('admin')->name('admin.')->group(function () {
+
+    // Tambahkan ini ↓
+    Route::get('/', function () {
+        if (auth()->check() && auth()->user()->role === 'admin') {
+            return redirect()->route('admin.dashboard');
+        }
+        return redirect()->route('admin.login');
+    });
+
+    Route::get('/login', [AdminAuthController::class, 'showLoginForm'])->name('login');
+    Route::post('/login', [AdminAuthController::class, 'login'])->name('login.post');
+    Route::post('/logout', [AdminAuthController::class, 'logout'])->name('logout');
+});
+
+// ============================================================
+// ADMIN PROTECTED ROUTES (wajib login sebagai admin)
+// ============================================================
+Route::prefix('admin')->name('admin.')->middleware('admin.auth')->group(function () {
+
     // Overview
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard'); // <-- ubah ini
-    Route::get('/analitik', [AnalitikController::class, 'index'])->name('admin.analitik');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/analitik', [AnalitikController::class, 'index'])->name('analitik');
 
     // Konten & Data
-    // Tambahkan rute anggota ini:
-    Route::get('/anggota', [AnggotaController::class, 'index'])->name('admin.anggota.index');
-    Route::get('/kegiatan', function () { return view('admin.kegiatan'); })->name('admin.kegiatan');
-    Route::get('/lomba', function () { return view('admin.lomba'); })->name('admin.lomba');
-    Route::get('/riset', function () { return view('admin.riset'); })->name('admin.riset');
-    Route::get('/pengumuman', function () { return view('admin.pengumuman'); })->name('admin.pengumuman');
+    Route::get('/anggota', [AnggotaController::class, 'index'])->name('anggota.index');
+    Route::get('/kegiatan', fn() => view('admin.kegiatan'))->name('kegiatan');
+    Route::get('/lomba', fn() => view('admin.lomba'))->name('lomba');
+    Route::get('/riset', fn() => view('admin.riset'))->name('riset');
+    Route::get('/pengumuman', fn() => view('admin.pengumuman'))->name('pengumuman');
 
     // Fitur Esensial
-    Route::get('/faq', function () { return view('admin.faq'); })->name('admin.faq');
-    Route::get('/reviews', function () { return view('admin.reviews'); })->name('admin.reviews');
+    Route::get('/faq', fn() => view('admin.faq'))->name('faq');
+    Route::get('/reviews', fn() => view('admin.reviews'))->name('reviews');
 
     // Halaman Landing
-    Route::get('/home-content', function () { return view('admin.home_content'); })->name('admin.home_content');
-    Route::get('/about-us', function () { return view('admin.about_us.edit'); })->name('admin.about_us.edit');
-    Route::get('/gallery', function () { return view('admin.gallery'); })->name('admin.gallery');
-    Route::get('/rekrutmen', function () { return view('admin.rekrutmen'); })->name('admin.rekrutmen');
-    Route::get('/contact', function () { return view('admin.contact'); })->name('admin.contact');
+    Route::get('/home-content', fn() => view('admin.home_content'))->name('home_content');
+    Route::get('/about-us', fn() => view('admin.about_us.edit'))->name('about_us.edit');
+    Route::get('/gallery', fn() => view('admin.gallery'))->name('gallery');
+    Route::get('/rekrutmen', fn() => view('admin.rekrutmen'))->name('rekrutmen');
+    Route::get('/contact', fn() => view('admin.contact'))->name('contact');
 
     // Tools
-    Route::get('/kalkulator', function () { return view('admin.kalkulator'); })->name('admin.kalkulator');
-    Route::get('/kamus', function () { return view('admin.kamus'); })->name('admin.kamus');
-    Route::get('/market', function () { return view('admin.market'); })->name('admin.market');
+    Route::get('/kalkulator', fn() => view('admin.kalkulator'))->name('kalkulator');
+    Route::get('/kamus', fn() => view('admin.kamus'))->name('kamus');
+    Route::get('/market', fn() => view('admin.market'))->name('market');
 
     // Pengaturan
-    Route::get('/pengaturan', function () { return view('admin.pengaturan'); })->name('admin.pengaturan');
+    Route::get('/pengaturan', fn() => view('admin.pengaturan'))->name('pengaturan');
 });
