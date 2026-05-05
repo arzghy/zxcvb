@@ -4,78 +4,114 @@
 @section('page-breadcrumb', 'Kelola Data Anggota')
 
 @section('content')
-<div class="section-header flex items-center justify-between mb-6 mt-2 gap-3 flex-wrap">
-    <div>
-        <div class="section-title text-lg font-bold text-gray-900">Manajemen Anggota</div>
-        <div class="section-sub text-sm text-gray-500" id="anggota-count">Total 247 anggota terdaftar</div>
-    </div>
-    <div class="flex gap-2 flex-wrap">
-        <div class="search-bar relative">
-            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm transition-colors duration-300 pointer-events-none search-icon">🔍</span>
-            <input class="inp inp-sm pl-9 hover:border-blue-400 focus:ring-2 focus:ring-blue-100 transition-all shadow-sm" placeholder="Cari anggota...">
+<div class="p-6 bg-[#f8fafc] min-h-screen">
+    
+    <!-- Header Page -->
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
+        <div>
+            <h1 class="text-2xl font-bold text-gray-800">Manajemen Anggota</h1>
+            <p class="text-sm text-gray-400 mt-1">Total {{ number_format($totalAnggota) }} pengguna terdaftar dalam sistem.</p>
         </div>
-        <select class="inp inp-sm w-auto hover:border-blue-400 focus:ring-2 focus:ring-blue-100 transition-all cursor-pointer shadow-sm">
-            <option value="">Semua Divisi</option>
-            <option>Administration</option><option>Education</option><option>Media Creative</option>
-            <option>Public Relation</option><option>Investment Gallery</option><option>Analyze Trading</option>
-        </select>
-        <button class="btn btn-primary btn-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300" onclick="document.getElementById('modal-anggota').classList.add('open')">+ Tambah</button>
-    </div>
-</div>
+        
+        <div class="flex items-center gap-4 mt-4 md:mt-0">
+            <!-- Form Pencarian -->
+            <form action="{{ route('admin.anggota.index') }}" method="GET" class="relative">
+                <span class="absolute inset-y-0 left-0 flex items-center pl-3">
+                    <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                </span>
+                <input type="text" name="search" value="{{ $search ?? '' }}" placeholder="Cari nama atau email..." class="py-2 pl-10 pr-4 rounded-full border border-gray-100 text-sm focus:outline-none focus:border-blue-500 w-64 bg-white shadow-sm">
+            </form>
 
-<div class="card overflow-hidden hover:shadow-lg transition-shadow duration-300">
-    <div class="overflow-x-auto">
-        <table class="w-full text-left border-collapse text-sm">
-            <thead>
-                <tr class="text-gray-500 uppercase tracking-wider border-b border-gray-200 bg-gray-50">
-                    <th class="px-4 py-3">Nama</th><th class="px-4 py-3">NIM</th><th class="px-4 py-3">Divisi</th>
-                    <th class="px-4 py-3">Angkatan</th><th class="px-4 py-3">Status</th><th class="px-4 py-3">Kontak</th><th class="px-4 py-3 text-right">Aksi</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr class="border-b border-gray-50 hover:bg-blue-50 transition-colors duration-200 group cursor-pointer">
-                    <td class="px-4 py-3">
-                        <div class="flex items-center gap-2.5">
-                            <div class="w-9 h-9 rounded-full bg-gradient-to-br from-blue-600 to-blue-400 flex items-center justify-center text-white font-bold text-xs shrink-0 group-hover:shadow-md group-hover:scale-105 transition-all duration-300">AP</div>
-                            <div>
-                                <div class="font-semibold text-gray-900 group-hover:text-blue-700 transition-colors">Andi Prasetyo</div>
-                                <div class="text-[0.72rem] text-gray-500">Koordinator</div>
+            <button class="bg-blue-800 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-semibold shadow-md flex items-center gap-2">
+                <span>+</span> Tambah Anggota
+            </button>
+        </div>
+    </div>
+
+    <!-- Table Section -->
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="w-full whitespace-nowrap text-left">
+                <thead class="bg-gray-50 border-b border-gray-100">
+                    <tr>
+                        <th class="px-6 py-4 text-[11px] font-bold text-gray-500 uppercase tracking-wider">No</th>
+                        <th class="px-6 py-4 text-[11px] font-bold text-gray-500 uppercase tracking-wider">Informasi Pengguna</th>
+                        <th class="px-6 py-4 text-[11px] font-bold text-gray-500 uppercase tracking-wider">Role</th>
+                        <th class="px-6 py-4 text-[11px] font-bold text-gray-500 uppercase tracking-wider">Tanggal Bergabung</th>
+                        <th class="px-6 py-4 text-[11px] font-bold text-gray-500 uppercase tracking-wider text-center">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-50">
+                    @forelse($anggotas as $index => $anggota)
+                    <tr class="hover:bg-blue-50/50 transition-colors">
+                        <!-- Penomoran otomatis menyesuaikan pagination -->
+                        <td class="px-6 py-4 text-sm text-gray-500 font-medium">
+                            {{ $anggotas->firstItem() + $index }}
+                        </td>
+                        
+                        <td class="px-6 py-4">
+                            <div class="flex items-center gap-3">
+                                <div class="h-10 w-10 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white font-bold text-sm shadow-sm">
+                                    <!-- Menampilkan Inisial Nama -->
+                                    {{ strtoupper(substr($anggota->name, 0, 1)) }}
+                                </div>
+                                <div>
+                                    <p class="text-sm font-bold text-gray-800">{{ $anggota->name }}</p>
+                                    <p class="text-xs text-gray-500">{{ $anggota->email }}</p>
+                                </div>
                             </div>
-                        </div>
-                    </td>
-                    <td class="px-4 py-3 font-mono text-[0.8rem] text-gray-700">J0401211001</td>
-                    <td class="px-4 py-3"><span class="bg-blue-100 text-blue-800 px-2.5 py-0.5 rounded-full text-[0.7rem] font-semibold group-hover:bg-blue-200 transition-colors">Analyze Trading</span></td>
-                    <td class="px-4 py-3 text-[0.85rem] text-gray-700">2021</td>
-                    <td class="px-4 py-3"><span class="bg-green-100 text-green-800 px-2.5 py-0.5 rounded-full text-[0.7rem] font-semibold">Aktif</span></td>
-                    <td class="px-4 py-3 text-[0.78rem] text-gray-500">085612341234</td>
-                    <td class="px-4 py-3 text-right">
-                        <button class="btn btn-ghost btn-icon btn-sm text-blue-600 hover:bg-blue-100 hover:scale-110 transition-transform">✏️</button>
-                        <button class="btn btn-ghost btn-icon btn-sm text-red-500 ml-1 hover:bg-red-100 hover:scale-110 transition-transform">🗑️</button>
-                    </td>
-                </tr>
-                <tr class="border-b border-gray-50 hover:bg-blue-50 transition-colors duration-200 group cursor-pointer">
-                    <td class="px-4 py-3">
-                        <div class="flex items-center gap-2.5">
-                            <div class="w-9 h-9 rounded-full bg-gradient-to-br from-emerald-500 to-emerald-400 flex items-center justify-center text-white font-bold text-xs shrink-0 group-hover:shadow-md group-hover:scale-105 transition-all duration-300">SD</div>
-                            <div>
-                                <div class="font-semibold text-gray-900 group-hover:text-emerald-700 transition-colors">Sari Dewi Putri</div>
-                                <div class="text-[0.72rem] text-gray-500">Staff</div>
+                        </td>
+
+                        <td class="px-6 py-4">
+                            @if(($anggota->role ?? 'user') == 'admin')
+                                <span class="bg-purple-100 text-purple-700 text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wide">Admin</span>
+                            @else
+                                <span class="bg-emerald-100 text-emerald-700 text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wide">Member</span>
+                            @endif
+                        </td>
+
+                        <td class="px-6 py-4 text-sm text-gray-600 font-medium">
+                            {{ $anggota->created_at ? $anggota->created_at->format('d M Y') : '-' }}
+                        </td>
+
+                        <td class="px-6 py-4 text-center">
+                            <div class="flex justify-center gap-2">
+                                <button class="p-2 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-colors tooltip" title="Edit Data">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+                                </button>
+                                <button class="p-2 bg-rose-50 text-rose-600 rounded-lg hover:bg-rose-100 transition-colors tooltip" title="Hapus Data">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                </button>
                             </div>
-                        </div>
-                    </td>
-                    <td class="px-4 py-3 font-mono text-[0.8rem] text-gray-700">J0401221034</td>
-                    <td class="px-4 py-3"><span class="bg-emerald-100 text-emerald-800 px-2.5 py-0.5 rounded-full text-[0.7rem] font-semibold group-hover:bg-emerald-200 transition-colors">Education</span></td>
-                    <td class="px-4 py-3 text-[0.85rem] text-gray-700">2022</td>
-                    <td class="px-4 py-3"><span class="bg-green-100 text-green-800 px-2.5 py-0.5 rounded-full text-[0.7rem] font-semibold">Aktif</span></td>
-                    <td class="px-4 py-3 text-[0.78rem] text-gray-500">081234567890</td>
-                    <td class="px-4 py-3 text-right">
-                        <button class="btn btn-ghost btn-icon btn-sm text-blue-600 hover:bg-blue-100 hover:scale-110 transition-transform">✏️</button>
-                        <button class="btn btn-ghost btn-icon btn-sm text-red-500 ml-1 hover:bg-red-100 hover:scale-110 transition-transform">🗑️</button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+                        </td>
+                    </tr>
+                    @empty
+                    <tr>
+                        <td colspan="5" class="px-6 py-12 text-center text-gray-400">
+                            <div class="flex flex-col items-center">
+                                <svg class="w-12 h-12 text-gray-300 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                                <p class="text-sm font-medium">Tidak ada data anggota ditemukan.</p>
+                            </div>
+                        </td>
+                    </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Pagination Links -->
+        @if($anggotas->hasPages())
+        <div class="border-t border-gray-100 px-6 py-4">
+            {{ $anggotas->appends(['search' => $search])->links() }}
+        </div>
+        @endif
     </div>
 </div>
-<!-- Modal Tambah Anggota di sini (Sama dengan sebelumnya) -->
 @endsection
+
+@push('styles')
+<style>
+/* Style pembantu agar modal berfungsi saat display:flex disematkan */
+.modal-overlay.open { display: flex !important; }
+</style>
+@endpush

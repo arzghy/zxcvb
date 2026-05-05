@@ -4,175 +4,203 @@
 @section('page-breadcrumb', 'Sistem Informasi Manajemen')
 
 @section('content')
-<div class="section-header flex items-center justify-between mb-5 mt-2 gap-3 flex-wrap" style="margin-bottom:24px">
-    <div>
-        <div class="section-title text-lg font-bold text-gray-900">📉 Analitik Pengguna</div>
-        <div class="section-sub text-sm text-gray-500">Statistik sistem informasi manajemen — data pengguna, emiten favorit & fitur terpopuler</div>
-    </div>
-    <div class="flex gap-2 flex-wrap">
-        <select class="inp inp-sm" id="analitik-filter-periode" style="width:auto">
-            <option value="30">30 Hari Terakhir</option>
-            <option value="7">7 Hari Terakhir</option>
-            <option value="90">3 Bulan Terakhir</option>
-        </select>
-        <button class="btn btn-outline border-blue-600 text-blue-700 bg-white btn-sm">🔄 Refresh</button>
-    </div>
-</div>
-
-<!-- STAT CARDS ANALITIK -->
-<div class="grid-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4" style="margin-bottom:24px" id="analitik-stats">
-    <div class="stat-card">
-        <div class="flex items-center justify-between mb-2.5">
-            <div style="font-size:.75rem;font-weight:700;color:var(--muted);text-transform:uppercase">User Registrasi</div>
-            <div style="font-size:1.4rem">👤</div>
-        </div>
-        <div class="mono" style="font-size:2rem;font-weight:800;color:#8b5cf6" id="stat-user-reg">183</div>
-        <div style="font-size:.75rem;color:var(--success);margin-top:4px;font-weight:600">▲ +24 bulan ini</div>
-    </div>
-    <div class="stat-card">
-        <div class="flex items-center justify-between mb-2.5">
-            <div style="font-size:.75rem;font-weight:700;color:var(--muted);text-transform:uppercase">Bukan Anggota</div>
-            <div style="font-size:1.4rem">🙋</div>
-        </div>
-        <div class="mono" style="font-size:2rem;font-weight:800;color:#0ea5e9" id="stat-non-anggota">183</div>
-        <div style="font-size:.75rem;color:var(--muted);margin-top:4px">Mahasiswa umum</div>
-    </div>
-    <div class="stat-card">
-        <div class="flex items-center justify-between mb-2.5">
-            <div style="font-size:.75rem;font-weight:700;color:var(--muted);text-transform:uppercase">View Website</div>
-            <div style="font-size:1.4rem">👁</div>
-        </div>
-        <div class="mono" style="font-size:2rem;font-weight:800;color:#0ea5e9" id="stat-view-website">1,942</div>
-        <div style="font-size:.75rem;color:var(--success);margin-top:4px;font-weight:600">▲ +12% minggu ini</div>
-    </div>
-    <div class="stat-card">
-        <div class="flex items-center justify-between mb-2.5">
-            <div style="font-size:.75rem;font-weight:700;color:var(--muted);text-transform:uppercase">Fitur Aktif</div>
-            <div style="font-size:1.4rem">⚡</div>
-        </div>
-        <div class="mono" style="font-size:2rem;font-weight:800;color:#10b981" id="stat-fitur-aktif">6</div>
-        <div style="font-size:.75rem;color:var(--success);margin-top:4px;font-weight:600">Fitur digunakan</div>
-    </div>
-</div>
-
-<!-- GRAFIK BARIS 1: User Registrasi -->
-<div style="margin-bottom:24px">
-    <div class="card p-6">
-        <div class="section-header flex items-center justify-between mt-2 gap-3 flex-wrap mb-4">
-            <div>
-                <div class="section-title text-lg font-bold text-gray-900" style="font-size:.95rem">👤 Pertumbuhan User Registrasi</div>
-                <div class="section-sub text-sm text-gray-500">User terdaftar (bukan anggota KSPM) per bulan</div>
-            </div>
-            <span class="badge badge-purple inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-violet-100 text-violet-800">Non-Anggota</span>
-        </div>
-        <!-- LINE Chart User Registrasi SVG -->
-        <div style="width:100%;overflow:hidden" id="chart-user-reg"></div>
-        <div class="mt-4 flex gap-4 flex-wrap">
-            <div><div style="font-size:.72rem;color:var(--muted)">Total Terdaftar</div><div style="font-size:1.2rem;font-weight:800;color:#8b5cf6">183</div></div>
-            <div><div style="font-size:.72rem;color:var(--muted)">Bulan ini</div><div style="font-size:1.2rem;font-weight:800;color:#10b981">+24</div></div>
-            <div><div style="font-size:.72rem;color:var(--muted)">Rata-rata/bln</div><div style="font-size:1.2rem;font-weight:800;color:#0ea5e9">+14</div></div>
-        </div>
-    </div>
-</div>
-
-<!-- GRAFIK BARIS 2: View Harian & Mingguan -->
-<div class="grid-2 grid grid-cols-1 lg:grid-cols-2 gap-5" style="margin-bottom:24px">
-    <!-- Pengunjung Harian -->
-    <div class="card p-6">
-        <div class="section-header flex items-center justify-between mt-2 gap-3 flex-wrap" style="margin-bottom:16px">
-            <div>
-                <div class="section-title text-lg font-bold text-gray-900" style="font-size:.95rem">👁 View Harian Website</div>
-                <div class="section-sub text-sm text-gray-500">Jumlah orang yang membuka website per hari (7 hari)</div>
-            </div>
-            <div style="display:flex;gap:5px">
-                <button class="btn btn-ghost btn-sm" onclick="toggleViewChart('harian')" id="vbtn-harian" style="border-color:var(--blue);color:var(--blue);font-size:.7rem">Harian</button>
-                <button class="btn btn-ghost btn-sm" onclick="toggleViewChart('mingguan')" id="vbtn-mingguan" style="font-size:.7rem">Mingguan</button>
-            </div>
-        </div>
-        <div style="position:relative;height:200px">
-            <canvas id="chartViewHarian"></canvas>
-        </div>
-        <div class="mt-3.5 flex gap-4 flex-wrap">
-            <div><div style="font-size:.7rem;color:var(--muted)">Total 7 Hari</div><div style="font-size:1.15rem;font-weight:800;color:var(--blue)" id="vstat-total">1.942</div></div>
-            <div><div style="font-size:.7rem;color:var(--muted)">Rata-rata/hari</div><div style="font-size:1.15rem;font-weight:800;color:#10b981" id="vstat-avg">277</div></div>
-            <div><div style="font-size:.7rem;color:var(--muted)">Puncak</div><div style="font-size:1.15rem;font-weight:800;color:#f59e0b" id="vstat-peak">412</div></div>
-        </div>
-    </div>
-
-    <!-- Fitur Paling Banyak Dipakai -->
-    <div class="card p-6">
-        <div class="section-header flex items-center justify-between mt-2 gap-3 flex-wrap mb-4">
-            <div>
-                <div class="section-title text-lg font-bold text-gray-900" style="font-size:.95rem">⚡ Fitur Paling Banyak Dipakai</div>
-                <div class="section-sub text-sm text-gray-500">Penggunaan fitur platform oleh semua user</div>
-            </div>
-            <span class="badge badge-green inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-green-100 text-green-800">Analytics</span>
-        </div>
-        <div id="chart-fitur" class="flex flex-col gap-3"></div>
-        <div style="margin-top:18px;display:flex;gap:10px;flex-wrap:wrap" id="fitur-legend"></div>
-    </div>
-</div>
-
-<!-- GRAFIK BARIS 3: Klik Riset & Klik Event -->
-<div class="grid-2 grid grid-cols-1 lg:grid-cols-2 gap-5" style="margin-bottom:24px">
-    <!-- Klik per Riset Publikasi -->
-    <div class="card p-6">
-        <div class="section-header flex items-center justify-between mt-2 gap-3 flex-wrap" style="margin-bottom:16px">
-            <div>
-                <div class="section-title text-lg font-bold text-gray-900" style="font-size:.95rem">📊 Trigger Klik — Riset & Publikasi</div>
-                <div class="section-sub text-sm text-gray-500">Jumlah orang yang melihat per judul riset/publikasi</div>
-            </div>
-            <span class="badge badge-purple inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-violet-100 text-violet-800">Klik</span>
-        </div>
-        <div style="position:relative;height:220px">
-            <canvas id="chartRisetKlik"></canvas>
-        </div>
-        <div style="margin-top:12px;display:flex;align-items:center;gap:8px;font-size:.78rem;color:var(--muted)">
-            <span>📌 Terbanyak:</span>
-            <strong style="color:#8b5cf6">Weekly Outlook Vol.12 — 412 klik</strong>
-        </div>
-    </div>
-
-    <!-- Klik per Event -->
-    <div class="card p-6">
-        <div class="section-header flex items-center justify-between mt-2 gap-3 flex-wrap" style="margin-bottom:16px">
-            <div>
-                <div class="section-title text-lg font-bold text-gray-900" style="font-size:.95rem">🎯 Trigger Klik — Event KSPM</div>
-                <div class="section-sub text-sm text-gray-500">Jumlah orang yang melihat per event/kegiatan</div>
-            </div>
-            <span class="badge badge-orange inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-100 text-amber-800">Klik</span>
-        </div>
-        <div style="position:relative;height:220px">
-            <canvas id="chartEventKlik"></canvas>
-        </div>
-        <div style="margin-top:12px;display:flex;align-items:center;gap:8px;font-size:.78rem;color:var(--muted)">
-            <span>🏆 Terbanyak:</span>
-            <strong style="color:#f59e0b">SPM Batch 2 — 538 klik</strong>
-        </div>
-    </div>
-</div>
-
-<!-- INSIGHT SECTION -->
-<div class="card p-6">
-    <div class="section-header flex items-center justify-between mt-2 gap-3 flex-wrap mb-4">
+<div class="p-6 bg-[#f8fafc] min-h-screen">
+    <!-- 2. SUB-HEADER & FILTER -->
+    <div class="flex justify-between items-center mb-6">
         <div>
-            <div class="section-title text-lg font-bold text-gray-900" style="font-size:.95rem">💡 Insight & Rekomendasi</div>
-            <div class="section-sub text-sm text-gray-500">Analisis otomatis berdasarkan data sistem</div>
+            <h2 class="text-lg font-bold text-gray-800 flex items-center gap-2">
+                <span class="text-xl">📉</span> Analitik Pengguna
+            </h2>
+            <p class="text-xs text-gray-500 mt-1">Statistik sistem informasi manajemen — data pengguna, emiten favorit & fitur terpopuler</p>
+        </div>
+        <div class="flex items-center gap-3">
+            <select class="border border-gray-200 rounded-lg px-3 py-2 text-sm bg-white text-gray-600 focus:outline-none shadow-sm">
+                <option>30 Hari Terakhir</option>
+                <option>7 Hari Terakhir</option>
+            </select>
+            <button class="border border-gray-200 rounded-lg px-4 py-2 text-sm bg-white text-blue-600 font-medium flex items-center gap-2 shadow-sm hover:bg-gray-50 transition-all">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                Refresh
+            </button>
         </div>
     </div>
-    <div class="grid-3 grid grid-cols-1 md:grid-cols-3 gap-5" id="analitik-insights">
-        <div class="card" style="padding:16px;border-left:4px solid #8b5cf6;background:#f5f3ff">
-            <div style="font-size:.78rem;font-weight:700;color:#5b21b6;margin-bottom:6px">📈 PERTUMBUHAN USER</div>
-            <div style="font-size:.85rem;color:var(--text);line-height:1.5">Pertumbuhan user non-anggota mencapai <strong>+24 user</strong> bulan ini. Pertimbangkan kampanye konversi ke anggota resmi KSPM.</div>
+
+    <!-- 3. METRIC CARDS (4 Columns) -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+        <!-- User Registrasi -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
+            <div class="flex justify-between items-center mb-3">
+                <h3 class="text-[11px] font-bold text-gray-500 tracking-wider uppercase">User Registrasi</h3>
+                <span class="text-indigo-900 font-bold">👤</span>
+            </div>
+            <div class="text-4xl font-bold text-purple-600 mb-2">{{ number_format($totalUsers ?? 0) }}</div>
+            <div class="text-xs font-semibold text-emerald-500 flex items-center gap-1">
+                <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z" clip-rule="evenodd"></path></svg>
+                +{{ $usersThisMonth ?? 0 }} bulan ini
+            </div>
         </div>
-        <div class="card" style="padding:16px;border-left:4px solid #0ea5e9;background:#f0f9ff">
-            <div style="font-size:.78rem;font-weight:700;color:#0369a1;margin-bottom:6px">👁 TRAFFIC WEBSITE</div>
-            <div style="font-size:.85rem;color:var(--text);line-height:1.5">Jumat memiliki traffic tertinggi <strong>(412 views)</strong>. Jadwalkan posting konten pada hari Kamis–Jumat untuk jangkauan maksimal.</div>
+
+        <!-- Bukan Anggota -->
+        <div class="bg-white rounded-xl shadow-sm border-2 border-blue-500 p-5 relative">
+            <div class="flex justify-between items-center mb-3">
+                <h3 class="text-[11px] font-bold text-gray-500 tracking-wider uppercase">Bukan Anggota</h3>
+                <span class="text-xl">🙋‍♂️</span>
+            </div>
+            <div class="text-4xl font-bold text-blue-500 mb-2">{{ number_format($nonAnggota ?? 0) }}</div>
+            <p class="text-xs font-medium text-gray-500">Mahasiswa umum</p>
         </div>
-        <div class="card" style="padding:16px;border-left:4px solid #10b981;background:#f0fdf4">
-            <div style="font-size:.78rem;font-weight:700;color:#065f46;margin-bottom:6px">⚡ FITUR TERPOPULER</div>
-            <div style="font-size:.85rem;color:var(--text);line-height:1.5"><strong>Kalkulator Saham</strong> adalah fitur paling sering diakses. Tingkatkan fitur ini dengan lebih banyak jenis kalkulasi investasi.</div>
+
+        <!-- View Website -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
+            <div class="flex justify-between items-center mb-3">
+                <h3 class="text-[11px] font-bold text-gray-500 tracking-wider uppercase">View Website</h3>
+                <span class="text-gray-400">👁️</span>
+            </div>
+            <div class="text-4xl font-bold text-cyan-500 mb-2">{{ number_format($totalViews ?? 0) }}</div>
+            <div class="text-xs font-semibold text-emerald-500 flex items-center gap-1">
+                <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z" clip-rule="evenodd"></path></svg>
+                +12% minggu ini
+            </div>
         </div>
+
+        <!-- Fitur Aktif -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
+            <div class="flex justify-between items-center mb-3">
+                <h3 class="text-[11px] font-bold text-gray-500 tracking-wider uppercase">Fitur Aktif</h3>
+                <span class="text-orange-500">⚡</span>
+            </div>
+            <div class="text-4xl font-bold text-emerald-500 mb-2">{{ $fiturAktif ?? 0 }}</div>
+            <p class="text-xs font-medium text-emerald-600">Fitur digunakan</p>
+        </div>
+    </div>
+
+    <!-- 4. PERTUMBUHAN USER SECTION -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-8 relative">
+        <div class="absolute top-6 right-6 bg-purple-100 text-purple-700 text-xs font-bold px-4 py-1 rounded-full uppercase tracking-wider">
+            Non-Anggota
+        </div>
+        <div class="flex items-center gap-2 mb-2">
+            <span class="text-indigo-900">👤</span>
+            <h3 class="text-lg font-bold text-gray-800">Pertumbuhan User Registrasi</h3>
+        </div>
+        <p class="text-sm text-gray-400 mb-8">User terdaftar (bukan anggota KSPM) per bulan</p>
+        
+        <div class="flex gap-12">
+            <div>
+                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Total Terdaftar</p>
+                <p class="text-3xl font-bold text-purple-600">{{ number_format($totalUsers ?? 0) }}</p>
+            </div>
+            <div>
+                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Bulan ini</p>
+                <p class="text-3xl font-bold text-emerald-500">+{{ $usersThisMonth ?? 0 }}</p>
+            </div>
+            <div>
+                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Rata-rata/bln</p>
+                <p class="text-3xl font-bold text-cyan-500">+{{ $avgPerMonth ?? 0 }}</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 5. TRIGGER KLIK (RISET & EVENT) -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+        <!-- Riset Trigger -->
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 flex flex-col justify-between min-h-[250px]">
+            <div>
+                <div class="flex justify-between items-start mb-4">
+                    <div>
+                        <h3 class="font-bold text-gray-800 flex items-center gap-2 text-lg">
+                            📊 Trigger Klik — Riset & Publikasi
+                        </h3>
+                        <p class="text-sm text-gray-400 mt-1">Jumlah orang yang melihat per judul riset/publikasi</p>
+                    </div>
+                    <span class="bg-purple-100 text-purple-600 text-[10px] font-black px-3 py-1 rounded-full uppercase">Klik</span>
+                </div>
+            </div>
+            <div class="mt-auto border-t border-gray-50 pt-4 flex items-center gap-2">
+                <span class="text-rose-500">📌</span>
+                <p class="text-sm font-medium text-gray-500">
+                    Terbanyak: <span class="text-indigo-600 font-bold">{{ $topReport->title ?? 'N/A' }}</span> 
+                    — <span class="text-gray-800 font-bold">{{ $topReport->views ?? 0 }} klik</span>
+                </p>
+            </div>
+        </div>
+
+        <!-- Event Trigger -->
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 flex flex-col justify-between min-h-[250px]">
+            <div>
+                <div class="flex justify-between items-start mb-4">
+                    <div>
+                        <h3 class="font-bold text-gray-800 flex items-center gap-2 text-lg">
+                            🎯 Trigger Klik — Event KSPM
+                        </h3>
+                        <p class="text-sm text-gray-400 mt-1">Jumlah orang yang melihat per event/kegiatan</p>
+                    </div>
+                    <span class="bg-orange-100 text-orange-600 text-[10px] font-black px-3 py-1 rounded-full uppercase">Klik</span>
+                </div>
+            </div>
+            <div class="mt-auto border-t border-gray-50 pt-4 flex items-center gap-2">
+                <span class="text-orange-500">🏆</span>
+                <p class="text-sm font-medium text-gray-500">
+                    Terbanyak: <span class="text-orange-600 font-bold">{{ $topEvent->name ?? $topEvent->title ?? 'N/A' }}</span> 
+                    — <span class="text-gray-800 font-bold">{{ $topEvent->views ?? 0 }} klik</span>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 6. INSIGHT & REKOMENDASI (Full Width) -->
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
+        <div class="mb-8">
+            <h3 class="text-lg font-bold text-gray-800 flex items-center gap-2">
+                💡 Insight & Rekomendasi
+            </h3>
+            <p class="text-sm text-gray-400 mt-1">Analisis otomatis berdasarkan data sistem</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- Box 1 -->
+            <div class="bg-[#fdfaff] border-l-4 border-purple-500 rounded-xl p-6 shadow-sm">
+                <h4 class="text-[10px] font-black text-purple-800 uppercase tracking-widest mb-3 flex items-center gap-2">
+                    📝 Pertumbuhan User
+                </h4>
+                <p class="text-sm text-gray-600 leading-relaxed">
+                    Pertumbuhan user non-anggota mencapai <span class="font-bold text-purple-600">+{{ $usersThisMonth ?? 0 }} user</span> bulan ini. 
+                    Pertimbangkan kampanye konversi ke anggota resmi KSPM.
+                </p>
+            </div>
+
+            <!-- Box 2 -->
+            <div class="bg-[#f5fbff] border-l-4 border-blue-500 rounded-xl p-6 shadow-sm">
+                <h4 class="text-[10px] font-black text-blue-800 uppercase tracking-widest mb-3 flex items-center gap-2">
+                    👁️ Traffic Website
+                </h4>
+                <p class="text-sm text-gray-600 leading-relaxed">
+                    Jumat memiliki traffic tertinggi ({{ number_format($totalViews ?? 0) }} views). Jadwalkan posting konten pada 
+                    hari Kamis—Jumat untuk jangkauan maksimal.
+                </p>
+            </div>
+
+            <!-- Box 3 -->
+            <div class="bg-[#f6fffb] border-l-4 border-emerald-500 rounded-xl p-6 shadow-sm">
+                <h4 class="text-[10px] font-black text-emerald-800 uppercase tracking-widest mb-3 flex items-center gap-2">
+                    ⚡ Fitur Terpopuler
+                </h4>
+                <p class="text-sm text-gray-600 leading-relaxed">
+                    <span class="font-bold text-emerald-600">{{ $topFeature ?? 'Kalkulator Saham' }}</span> adalah fitur paling 
+                    sering diakses. Tingkatkan fitur ini dengan lebih banyak jenis kalkulasi investasi.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Links Navigation -->
+    <div class="mt-8 flex gap-6">
+        @if(Route::has('admin.report.index'))
+            <a href="{{ route('admin.report.index') }}" class="text-[10px] font-black text-blue-600 hover:underline tracking-widest uppercase">→ Manajemen Riset</a>
+        @endif
+        @if(Route::has('admin.event.index'))
+            <a href="{{ route('admin.event.index') }}" class="text-[10px] font-black text-blue-600 hover:underline tracking-widest uppercase">→ Kelola Event</a>
+        @endif
     </div>
 </div>
 @endsection

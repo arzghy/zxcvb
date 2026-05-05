@@ -1,7 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Admin\DashboardController; // <-- tambahkan ini
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\AnalitikController;
+use App\Http\Controllers\Admin\AnggotaController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -10,10 +12,11 @@ Route::get('/', function () {
 Route::prefix('admin')->group(function () {
     // Overview
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard'); // <-- ubah ini
-    Route::get('/analitik', function () { return view('admin.analitik'); })->name('admin.analitik');
+    Route::get('/analitik', [AnalitikController::class, 'index'])->name('admin.analitik');
 
     // Konten & Data
-    Route::get('/anggota', function () { return view('admin.anggota'); })->name('admin.anggota');
+    // Tambahkan rute anggota ini:
+    Route::get('/anggota', [AnggotaController::class, 'index'])->name('admin.anggota.index');
     Route::get('/kegiatan', function () { return view('admin.kegiatan'); })->name('admin.kegiatan');
     Route::get('/lomba', function () { return view('admin.lomba'); })->name('admin.lomba');
     Route::get('/riset', function () { return view('admin.riset'); })->name('admin.riset');
