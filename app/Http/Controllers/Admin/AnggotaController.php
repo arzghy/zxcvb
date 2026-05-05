@@ -13,17 +13,24 @@ class AnggotaController extends Controller
     public function index(Request $request)
     {
         $search = $request->input('search');
+        $divisi = $request->input('divisi');
         $query = User::query();
 
         if ($search) {
-            $query->where('name', 'like', "%{$search}%")
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
                   ->orWhere('nim', 'like', "%{$search}%");
+            });
         }
 
-        $anggotas = $query->latest()->paginate(10);
+        if ($divisi) {
+            $query->where('divisi', $divisi);
+        }
+
+        $anggotas = $query->latest()->paginate(10)->withQueryString();
         $totalAnggota = User::count();
 
-        return view('admin.anggota', compact('anggotas', 'totalAnggota', 'search'));
+        return view('admin.anggota', compact('anggotas', 'totalAnggota', 'search', 'divisi'));
     }
 
     // Menyimpan anggota baru (dari Modal Tambah)
@@ -34,21 +41,19 @@ class AnggotaController extends Controller
             'nim' => 'required|string|max:50|unique:users,nim',
             'email' => 'nullable|email|unique:users,email',
             'divisi' => 'required|string',
-            // Default password agar admin tidak perlu input manual, bisa diset misal: "kspmsvipb"
-            // Atau sesuai preferensi. Di sini saya buat sama dengan NIM sebagai default awal.
         ]);
 
         User::create([
             'name' => $request->name,
             'nim' => $request->nim,
             'email' => $request->email,
-            'password' => Hash::make($request->nim), // Password default pakai NIM
+            'password' => Hash::make($request->nim),
             'divisi' => $request->divisi,
             'angkatan' => $request->angkatan,
             'whatsapp' => $request->whatsapp,
             'status' => $request->status ?? 'aktif',
             'jabatan' => $request->jabatan ?? 'anggota',
-            'role' => 'user' // Default role
+            'role' => 'user'
         ]);
 
         return redirect()->back()->with('success', 'Anggota berhasil ditambahkan!');

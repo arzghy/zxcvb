@@ -41,11 +41,11 @@ Route::prefix('admin')->name('admin.')->middleware('admin.auth')->group(function
     // Konten & Data
     Route::get('/anggota', [AnggotaController::class, 'index'])->name('anggota.index');
     // Rute POST untuk menyimpan data baru (Modal Tambah)
-    Route::post('/anggota', [AnggotaController::class, 'store'])->name('admin.anggota.store');
+    Route::post('/anggota', [AnggotaController::class, 'store'])->name('anggota.store');
     // Rute PUT untuk menyimpan data yang diedit (Modal Edit)
-    Route::put('/anggota/{id}', [AnggotaController::class, 'update'])->name('admin.anggota.update');
+    Route::put('/anggota/{id}', [AnggotaController::class, 'update'])->name('anggota.update');
     // Rute DELETE untuk menghapus data (Modal Hapus)
-    Route::delete('/anggota/{id}', [AnggotaController::class, 'destroy'])->name('admin.anggota.destroy');
+    Route::delete('/anggota/{id}', [AnggotaController::class, 'destroy'])->name('anggota.destroy');
     Route::get('/kegiatan', fn() => view('admin.kegiatan'))->name('kegiatan');
     Route::get('/lomba', fn() => view('admin.lomba'))->name('lomba');
     Route::get('/riset', fn() => view('admin.riset'))->name('riset');
