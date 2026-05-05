@@ -82,8 +82,8 @@ class DashboardController extends Controller
 
         // Gabungkan & urutkan berdasarkan waktu terbaru, ambil 6 teratas
         $activities = $newUsers
-            ->merge($newEvents)
-            ->merge($newReports)
+            ->concat($newEvents)
+            ->concat($newReports)
             ->sortByDesc('time')
             ->take(6)
             ->values();

@@ -118,12 +118,6 @@ body{font-family:'Plus Jakarta Sans',sans-serif;color:var(--text);background:var
     <a href="{{ url('/admin/pengumuman') }}" class="nav-item {{ request()->is('admin/pengumuman*') ? 'active' : '' }}">
         <span class="ni-icon">📢</span> Pengumuman
     </a>
-    <a href="{{ url('/admin/faq') }}" class="nav-item {{ request()->is('admin/faq*') ? 'active' : '' }}">
-        <span class="ni-icon">❓</span> Manajemen FAQ
-    </a>
-    <a href="{{ url('/admin/reviews') }}" class="nav-item {{ request()->is('admin/reviews*') ? 'active' : '' }}">
-        <span class="ni-icon">⭐</span> Manajemen Reviews
-    </a>
 
     <div class="nav-section text-xs font-bold tracking-widest text-white/35 px-5 pt-3.5 pb-1 uppercase">Halaman Landing</div>
     <a href="{{ url('/admin/home-content') }}" class="nav-item {{ request()->is('admin/home-content*') ? 'active' : '' }}">
@@ -180,7 +174,9 @@ body{font-family:'Plus Jakarta Sans',sans-serif;color:var(--text);background:var
             <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">🔍</span>
             <input class="inp pl-9 py-1.5 text-sm" placeholder="Cari...">
         </div>
-        <button class="btn btn-ghost" style="padding:6px 10px;" title="Notifikasi">🔔</button>
+        <button class="p-2 rounded-lg border border-yellow-200 bg-yellow-50 text-yellow-500 transition-colors hover:bg-yellow-100">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"></path></svg>
+        </button>
 
         <!-- Tambahkan ini: -->
         <form action="{{ route('admin.logout') }}" method="POST" style="margin:0">

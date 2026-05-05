@@ -1,144 +1,160 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login Admin — KSPM SV IPB</title>
+
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+
+    <!-- Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+
     <style>
         body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .font-mono { font-family: "JetBrains Mono", monospace; }
+
+        /* Background foto IPB dipanggil dari folder public/images */
+        .bg-photo {
+            position: fixed; inset: 0; z-index: 0;
+            background: url("{{ asset('images/bg-ipb.jpg') }}") center/cover no-repeat;
+        }
+
+        /* Overlay transparan agar form tetap terbaca jelas */
+        .bg-overlay {
+            position: fixed; inset: 0; z-index: 1;
+            background: linear-gradient(135deg, rgba(10,15,46,0.88) 0%, rgba(13,26,110,0.80) 40%, rgba(26,47,181,0.70) 70%, rgba(37,99,235,0.65) 100%);
+        }
+
+        .bg-grid {
+            position: fixed; inset: 0; z-index: 2;
+            background-image: radial-gradient(rgba(255,255,255,0.07) 1px, transparent 1px);
+            background-size: 28px 28px;
+        }
+
+        /* Animasi */
+        @keyframes cardIn {
+            from { opacity: 0; transform: translateY(40px) scale(.96); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        @keyframes logoPop {
+            from { opacity: 0; transform: scale(0.55) rotate(-8deg); }
+            to { opacity: 1; transform: scale(1) rotate(0deg); }
+        }
+        @keyframes ringPulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.6; }
+        }
+
+        .animate-card-in { animation: cardIn .65s cubic-bezier(.4,0,.2,1) both; }
+        .animate-logo-pop { animation: logoPop .6s .25s cubic-bezier(.4,0,.2,1) both; }
+        .animate-ring-pulse { animation: ringPulse 6s ease-in-out infinite; }
+
+        .ring3 {
+            position: fixed; z-index: 3; width: 160px; height: 160px; top: 50%; left: 50%;
+            transform: translate(-50%, -50%); border-radius: 50%;
+            border: 1px solid rgba(96,165,250,0.1); pointer-events: none;
+        }
+
+        .btn-gradient { background: linear-gradient(135deg, #0d1a6e 0%, #1a2fb5 50%, #2563eb 100%); }
+        .btn-gradient:hover { background: linear-gradient(135deg, #1a2fb5 0%, #2563eb 50%, #3b82f6 100%); }
+        .card-shadow { box-shadow: 0 40px 100px rgba(0,0,0,0.45), 0 0 0 1px rgba(255,255,255,0.15); }
+        .inp:focus { border-color: #1a2fb5; box-shadow: 0 0 0 4px rgba(26,47,181,0.09); outline: none; }
     </style>
 </head>
-<body class="min-h-screen bg-gradient-to-br from-blue-950 via-blue-900 to-blue-800 flex items-center justify-center p-4">
+<body class="min-h-screen flex items-center justify-center overflow-hidden relative bg-[#0d0f1a]">
 
-    <div class="w-full max-w-md">
+    <!-- Backgrounds (Ini yang tadi tertinggal) -->
+    <div class="bg-photo"></div>
+    <div class="bg-overlay"></div>
+    <div class="bg-grid"></div>
 
-        <!-- Card Login -->
-        <div class="bg-white rounded-2xl shadow-2xl overflow-hidden">
+    <!-- Dekoratif rings -->
+    <div class="fixed z-[3] w-[400px] h-[400px] -top-[150px] -right-[120px] rounded-full border border-white/[0.08] pointer-events-none animate-ring-pulse"></div>
+    <div class="fixed z-[3] w-[280px] h-[280px] -bottom-[80px] -left-[80px] rounded-full border border-white/[0.08] pointer-events-none animate-ring-pulse" style="animation-delay: 3s"></div>
+    <div class="ring3" style="animation-delay: 4s"></div>
 
-            <!-- Header Card -->
-            <div class="bg-gradient-to-r from-blue-900 to-blue-700 px-8 py-8 text-center">
-                <div class="w-16 h-16 bg-white rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
-                    <span class="text-blue-800 font-extrabold text-2xl">K</span>
+    <!-- Main content -->
+    <div class="relative z-10 flex flex-col items-center gap-4 px-4 py-5 w-full">
+        
+        <div class="w-full max-w-[460px] animate-card-in">
+            <div class="bg-white/[0.97] backdrop-blur-2xl rounded-[28px] p-10 card-shadow" id="login-card">
+
+                <!-- Logo -->
+                <div class="text-center mb-7">
+                    <div class="w-[100px] h-[100px] bg-white rounded-[22px] flex items-center justify-center mx-auto mb-4 shadow-lg p-2 animate-logo-pop border-2 border-blue-800/10">
+                        <span class="text-3xl font-bold text-blue-800">KSPM</span>
+                    </div>
+                    <div class="text-[1.5rem] font-extrabold text-gray-900 tracking-tight">KSPM SV IPB</div>
+                    <div class="text-[.78rem] text-gray-500 mt-1 font-medium">Klub Studi Pasar Modal — Sekolah Vokasi IPB University</div>
+                    <div class="inline-flex items-center gap-1.5 bg-blue-50 text-blue-800 text-[.68rem] font-bold px-3 py-1 rounded-full mt-2 border border-blue-800/15 tracking-wide">
+                        🔐 Admin Panel
+                    </div>
                 </div>
-                <h1 class="text-white font-bold text-xl">KSPM SV IPB</h1>
-                <p class="text-blue-200 text-sm mt-1">Admin Dashboard</p>
-            </div>
 
-            <!-- Form -->
-            <div class="px-8 py-8">
-                <h2 class="text-gray-800 font-bold text-lg mb-1">Selamat Datang 👋</h2>
-                <p class="text-gray-400 text-sm mb-6">Masuk untuk mengelola dashboard admin.</p>
+                <!-- Divider -->
+                <div class="flex items-center gap-2.5 mb-5">
+                    <div class="flex-1 h-px bg-gray-200"></div>
+                    <span class="text-[.7rem] font-bold text-gray-400 uppercase tracking-[.08em] whitespace-nowrap">Masuk ke Dashboard</span>
+                    <div class="flex-1 h-px bg-gray-200"></div>
+                </div>
 
-                <!-- Alert Error -->
-                @if ($errors->any())
-                    <div class="bg-red-50 border border-red-200 text-red-700 rounded-xl px-4 py-3 mb-5 text-sm flex items-start gap-2">
-                        <span class="mt-0.5">⚠️</span>
-                        <span>{{ $errors->first() }}</span>
-                    </div>
-                @endif
-
-                <!-- Alert Session -->
-                @if (session('status'))
-                    <div class="bg-green-50 border border-green-200 text-green-700 rounded-xl px-4 py-3 mb-5 text-sm">
-                        {{ session('status') }}
-                    </div>
-                @endif
-
-                <form action="{{ route('admin.login.post') }}" method="POST">
+                <!-- Form Laravel -->
+                <form action="{{ url('/admin/login') }}" method="POST">
                     @csrf
+                    
+                    <!-- Alert jika login gagal / Error Validasi -->
+                    @if ($errors->any())
+                        <div class="flex items-center gap-2 bg-red-100 text-red-800 border border-red-300 rounded-[10px] px-4 py-3 text-[.82rem] font-semibold mb-3.5">
+                            <span>⛔</span>
+                            <span>Username atau password salah!</span>
+                        </div>
+                    @endif
 
                     <!-- Username -->
                     <div class="mb-4">
-                        <label class="block text-sm font-semibold text-gray-600 mb-1.5">
-                            Username
+                        <label class="flex items-center gap-1.5 text-[.75rem] font-bold text-gray-500 uppercase tracking-[.06em] mb-1.5">
+                            <span>👤</span> Username
                         </label>
                         <div class="relative">
-                            <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400">👤</span>
-                            <input
-                                type="text"
-                                name="username"
-                                value="{{ old('username') }}"
+                            <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-[.9rem] text-gray-400 pointer-events-none">@</span>
+                            <input type="text" name="username" value="{{ old('username') }}" required
                                 placeholder="Masukkan username admin"
-                                required
-                                autofocus
-                                class="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl bg-gray-50 text-sm focus:outline-none focus:border-blue-500 focus:bg-white transition @error('username') border-red-400 bg-red-50 @enderror"
-                            />
+                                class="inp w-full pl-11 pr-3.5 py-3 border-[1.5px] border-gray-200 rounded-xl text-[.9rem] bg-gray-50 transition-all text-gray-900"/>
                         </div>
                     </div>
 
                     <!-- Password -->
-                    <div class="mb-5">
-                        <label class="block text-sm font-semibold text-gray-600 mb-1.5">
-                            Password
+                    <div class="mb-4">
+                        <label class="flex items-center gap-1.5 text-[.75rem] font-bold text-gray-500 uppercase tracking-[.06em] mb-1.5">
+                            <span>🔒</span> Password
                         </label>
                         <div class="relative">
-                            <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400">🔒</span>
-                            <input
-                                type="password"
-                                name="password"
-                                id="password-input"
+                            <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-[.9rem] text-gray-400 pointer-events-none">🔑</span>
+                            <input type="password" name="password" id="inp-password" required
                                 placeholder="Masukkan password"
-                                required
-                                class="w-full pl-10 pr-12 py-3 border border-gray-200 rounded-xl bg-gray-50 text-sm focus:outline-none focus:border-blue-500 focus:bg-white transition"
-                            />
-                            <!-- Toggle show/hide password -->
-                            <button
-                                type="button"
-                                onclick="togglePassword()"
-                                class="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 text-sm"
-                                id="toggle-btn"
-                            >👁️</button>
+                                class="inp w-full pl-11 pr-12 py-3 border-[1.5px] border-gray-200 rounded-xl text-[.9rem] bg-gray-50 transition-all text-gray-900"/>
+                            <button type="button" onclick="const pw=document.getElementById('inp-password'); pw.type=pw.type==='password'?'text':'password';"
+                                class="absolute right-3 top-1/2 -translate-y-1/2 text-[.9rem] text-gray-400 hover:text-blue-800 transition-colors bg-transparent border-none cursor-pointer p-0.5">👁</button>
                         </div>
                     </div>
 
-                    <!-- Remember Me -->
-                    <div class="flex items-center gap-2 mb-6">
-                        <input type="checkbox" name="remember" id="remember"
-                            class="w-4 h-4 rounded border-gray-300 text-blue-600 cursor-pointer">
-                        <label for="remember" class="text-sm text-gray-500 cursor-pointer">
-                            Ingat saya di perangkat ini
-                        </label>
-                    </div>
-
-                    <!-- Submit -->
-                    <button
-                        type="submit"
-                        class="w-full bg-blue-800 hover:bg-blue-700 text-white font-bold py-3 rounded-xl transition-all shadow-md hover:shadow-lg active:scale-95 text-sm"
-                    >
-                        🔑 Masuk ke Dashboard
+                    <!-- Submit button -->
+                    <button type="submit"
+                        class="btn-gradient relative w-full py-3.5 rounded-[14px] border-none cursor-pointer text-white font-bold text-[.95rem] transition-all flex items-center justify-center shadow-lg hover:shadow-xl hover:-translate-y-0.5 active:scale-95">
+                        🔓 Masuk ke Dashboard
                     </button>
                 </form>
-            </div>
 
-            <!-- Footer Card -->
-            <div class="bg-gray-50 border-t border-gray-100 px-8 py-4 text-center">
-                <p class="text-xs text-gray-400">
-                    Hanya untuk administrator KSPM SV IPB. <br>
-                    Hubungi IT jika lupa password.
-                </p>
+                <!-- Footer -->
+                <div class="text-center mt-5 text-[.73rem] text-gray-500 leading-relaxed">
+                    Akses hanya untuk <strong class="text-gray-900">Admin KSPM SV IPB</strong><br/>
+                    Kendala login? Hubungi <strong class="text-gray-900">Divisi IT KSPM</strong>
+                </div>
+
             </div>
         </div>
-
-        <p class="text-center text-blue-300 text-xs mt-6">
-            © {{ date('Y') }} KSPM SV IPB — All rights reserved
-        </p>
     </div>
-
-    <script>
-        function togglePassword() {
-            const input = document.getElementById('password-input');
-            const btn = document.getElementById('toggle-btn');
-            if (input.type === 'password') {
-                input.type = 'text';
-                btn.textContent = '🙈';
-            } else {
-                input.type = 'password';
-                btn.textContent = '👁️';
-            }
-        }
-    </script>
-
 </body>
 </html>
