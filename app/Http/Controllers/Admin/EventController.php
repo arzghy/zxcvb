@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Event;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class EventController extends Controller
 {
@@ -12,6 +13,14 @@ class EventController extends Controller
     public function index() {
         $events = Event::orderBy('event_date', 'asc')->get();
         return view('admin.event.index', compact('events'));
+    }
+
+    public function kegiatanIndex() {
+        $allEvents = Event::orderBy('event_date', 'asc')->get();
+        $upcomingEvents = Event::where('event_date', '>=', Carbon::today())
+            ->orderBy('event_date', 'asc')
+            ->get();
+        return view('admin.kegiatan', compact('allEvents', 'upcomingEvents'));
     }
 
     public function store(Request $request) {

@@ -26,242 +26,240 @@
     </div>
 </div>
 
-<div class="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-5">
-    <!-- Calendar UI -->
-    <div class="card p-5">
+{{-- Grid dua kartu dengan tinggi yang selalu sama (items-stretch default di grid) --}}
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-5" style="align-items: stretch;">
+
+    {{-- ===== KARTU KALENDER ===== --}}
+    <div class="card p-5 flex flex-col">
         <div class="flex items-center justify-between mb-4">
             <button class="btn btn-ghost btn-icon btn-sm">◀</button>
-            <div class="font-bold text-[0.95rem]">Maret 2026</div>
+            <div class="font-bold text-[0.95rem]" id="cal-title"></div>
             <button class="btn btn-ghost btn-icon btn-sm">▶</button>
         </div>
         <div class="grid grid-cols-7 gap-1 text-center mb-1">
-            <div class="text-[0.68rem] font-bold text-gray-500 uppercase py-1">Min</div>
-            <div class="text-[0.68rem] font-bold text-gray-500 uppercase py-1">Sen</div>
-            <div class="text-[0.68rem] font-bold text-gray-500 uppercase py-1">Sel</div>
-            <div class="text-[0.68rem] font-bold text-gray-500 uppercase py-1">Rab</div>
-            <div class="text-[0.68rem] font-bold text-gray-500 uppercase py-1">Kam</div>
-            <div class="text-[0.68rem] font-bold text-gray-500 uppercase py-1">Jum</div>
-            <div class="text-[0.68rem] font-bold text-gray-500 uppercase py-1">Sab</div>
+            @foreach(['Min','Sen','Sel','Rab','Kam','Jum','Sab'] as $day)
+                <div class="text-[0.68rem] font-bold text-gray-500 uppercase py-1">{{ $day }}</div>
+            @endforeach
         </div>
-        <div class="grid grid-cols-7 gap-1 text-center">
-            <!-- Offset Hari Pertama Bulan -->
-            <div></div><div></div><div></div><div></div><div></div>
-            <!-- Tanggal Kalender Sesuai Desain JS -->
-            <div class="aspect-square flex flex-col items-center justify-center rounded-lg text-sm hover:bg-blue-50 cursor-pointer transition">1</div>
-            <div class="aspect-square flex flex-col items-center justify-center rounded-lg text-sm hover:bg-blue-50 cursor-pointer transition">2</div>
-            <div class="aspect-square flex flex-col items-center justify-center rounded-lg text-sm hover:bg-blue-50 cursor-pointer transition relative">
-                3
-            </div>
-            <div class="aspect-square flex flex-col items-center justify-center rounded-lg text-sm bg-blue-600 text-white font-bold cursor-pointer transition relative">
-                4 <!-- Today Marker (Sesuai Konteks 4 Mei, kita simulasikan visualisasinya) -->
-            </div>
-            <div class="aspect-square flex flex-col items-center justify-center rounded-lg text-sm hover:bg-blue-50 cursor-pointer transition relative">
-                5 <div class="absolute bottom-1 w-1 h-1 bg-sky-500 rounded-full"></div> <!-- Event Marker -->
-            </div>
-            <div class="aspect-square flex flex-col items-center justify-center rounded-lg text-sm hover:bg-blue-50 cursor-pointer transition">6</div>
-            <div class="aspect-square flex flex-col items-center justify-center rounded-lg text-sm hover:bg-blue-50 cursor-pointer transition">7</div>
-            <div class="aspect-square flex flex-col items-center justify-center rounded-lg text-sm hover:bg-blue-50 cursor-pointer transition">8</div>
-            <div class="aspect-square flex flex-col items-center justify-center rounded-lg text-sm hover:bg-blue-50 cursor-pointer transition">9</div>
-            <div class="aspect-square flex flex-col items-center justify-center rounded-lg text-sm hover:bg-blue-50 cursor-pointer transition relative">
-                10 <div class="absolute bottom-1 w-1 h-1 bg-sky-500 rounded-full"></div> <!-- Event Marker -->
-            </div>
-            <div class="aspect-square flex flex-col items-center justify-center rounded-lg text-sm hover:bg-blue-50 cursor-pointer transition">11</div>
-            <div class="aspect-square flex flex-col items-center justify-center rounded-lg text-sm hover:bg-blue-50 cursor-pointer transition">12</div>
-            <div class="aspect-square flex flex-col items-center justify-center rounded-lg text-sm hover:bg-blue-50 cursor-pointer transition">13</div>
-            <div class="aspect-square flex flex-col items-center justify-center rounded-lg text-sm hover:bg-blue-50 cursor-pointer transition">14</div>
-            <div class="aspect-square flex flex-col items-center justify-center rounded-lg text-sm hover:bg-blue-50 cursor-pointer transition relative">
-                15 <div class="absolute bottom-1 w-1 h-1 bg-sky-500 rounded-full"></div> <!-- Event Marker -->
-            </div>
-            <div class="aspect-square flex flex-col items-center justify-center rounded-lg text-sm hover:bg-blue-50 cursor-pointer transition">16</div>
-            <div class="aspect-square flex flex-col items-center justify-center rounded-lg text-sm hover:bg-blue-50 cursor-pointer transition">17</div>
-            <div class="aspect-square flex flex-col items-center justify-center rounded-lg text-sm hover:bg-blue-50 cursor-pointer transition">18</div>
-            <div class="aspect-square flex flex-col items-center justify-center rounded-lg text-sm hover:bg-blue-50 cursor-pointer transition">19</div>
-            <div class="aspect-square flex flex-col items-center justify-center rounded-lg text-sm hover:bg-blue-50 cursor-pointer transition">20</div>
-            <div class="aspect-square flex flex-col items-center justify-center rounded-lg text-sm hover:bg-blue-50 cursor-pointer transition">21</div>
-            <div class="aspect-square flex flex-col items-center justify-center rounded-lg text-sm hover:bg-blue-50 cursor-pointer transition relative">
-                22 <div class="absolute bottom-1 w-1 h-1 bg-sky-500 rounded-full"></div> <!-- Event Marker -->
-            </div>
-            <div class="aspect-square flex flex-col items-center justify-center rounded-lg text-sm hover:bg-blue-50 cursor-pointer transition">23</div>
-            <div class="aspect-square flex flex-col items-center justify-center rounded-lg text-sm hover:bg-blue-50 cursor-pointer transition">24</div>
-            <div class="aspect-square flex flex-col items-center justify-center rounded-lg text-sm hover:bg-blue-50 cursor-pointer transition">25</div>
-            <div class="aspect-square flex flex-col items-center justify-center rounded-lg text-sm hover:bg-blue-50 cursor-pointer transition">26</div>
-            <div class="aspect-square flex flex-col items-center justify-center rounded-lg text-sm hover:bg-blue-50 cursor-pointer transition">27</div>
-            <div class="aspect-square flex flex-col items-center justify-center rounded-lg text-sm hover:bg-blue-50 cursor-pointer transition">28</div>
-            <div class="aspect-square flex flex-col items-center justify-center rounded-lg text-sm hover:bg-blue-50 cursor-pointer transition">29</div>
-            <div class="aspect-square flex flex-col items-center justify-center rounded-lg text-sm hover:bg-blue-50 cursor-pointer transition">30</div>
-            <div class="aspect-square flex flex-col items-center justify-center rounded-lg text-sm hover:bg-blue-50 cursor-pointer transition">31</div>
+        <div class="grid grid-cols-7 gap-1 text-center" id="cal-grid">
+            {{-- Diisi oleh JavaScript --}}
         </div>
+        {{-- Spacer agar kalender mengisi sisa tinggi --}}
+        <div class="flex-1"></div>
     </div>
 
-    <!-- Upcoming Events List -->
-    <div class="card p-5">
+    {{-- ===== KARTU KEGIATAN MENDATANG ===== --}}
+    <div class="card p-5 flex flex-col">
         <div class="font-bold mb-3.5 text-gray-900">Kegiatan Mendatang</div>
-        <div class="flex flex-col gap-2.5">
-            <!-- Kegiatan 1 -->
-            <div class="flex gap-3 p-2.5 rounded-xl border border-gray-200 hover:border-blue-500 transition">
-                <div class="text-center w-10 shrink-0 border-r border-gray-100 pr-2">
-                    <div class="font-mono font-extrabold text-blue-600 text-lg">15</div>
-                    <div class="text-[0.65rem] text-gray-500">Mar</div>
-                </div>
-                <div>
-                    <div class="text-[0.85rem] font-semibold text-gray-900">Sekolah Pasar Modal Batch 2</div>
-                    <div class="text-[0.72rem] text-gray-500 mt-0.5">09:00 · Auditorium SV IPB</div>
-                </div>
+
+        @if($upcomingEvents->isEmpty())
+            {{-- State kosong --}}
+            <div class="flex-1 flex flex-col items-center justify-center py-10 text-gray-400">
+                <div class="text-5xl mb-3 opacity-40">📅</div>
+                <p class="text-sm font-semibold text-gray-500">Kegiatan belum tersedia</p>
+                <p class="text-xs text-gray-400 mt-1">Tambahkan kegiatan baru dengan tombol "+ Tambah Kegiatan"</p>
             </div>
-            <!-- Kegiatan 2 -->
-            <div class="flex gap-3 p-2.5 rounded-xl border border-gray-200 hover:border-blue-500 transition">
-                <div class="text-center w-10 shrink-0 border-r border-gray-100 pr-2">
-                    <div class="font-mono font-extrabold text-blue-600 text-lg">22</div>
-                    <div class="text-[0.65rem] text-gray-500">Mar</div>
+        @else
+            <div class="flex flex-col gap-2.5 flex-1">
+                @foreach($upcomingEvents as $ev)
+                <div class="flex gap-3 p-2.5 rounded-xl border border-gray-200 hover:border-blue-500 transition">
+                    <div class="text-center w-10 shrink-0 border-r border-gray-100 pr-2">
+                        <div class="font-mono font-extrabold text-blue-600 text-lg">
+                            {{ \Carbon\Carbon::parse($ev->event_date)->format('d') }}
+                        </div>
+                        <div class="text-[0.65rem] text-gray-500">
+                            {{ \Carbon\Carbon::parse($ev->event_date)->translatedFormat('M') }}
+                        </div>
+                    </div>
+                    <div class="min-w-0">
+                        <div class="text-[0.85rem] font-semibold text-gray-900 truncate">{{ $ev->title }}</div>
+                        <div class="text-[0.72rem] text-gray-500 mt-0.5 truncate">📍 {{ $ev->location }}</div>
+                        @if($ev->description)
+                            <div class="text-[0.72rem] text-gray-400 mt-0.5 line-clamp-1">{{ $ev->description }}</div>
+                        @endif
+                    </div>
                 </div>
-                <div>
-                    <div class="text-[0.85rem] font-semibold text-gray-900">Workshop Analisis Fundamental</div>
-                    <div class="text-[0.72rem] text-gray-500 mt-0.5">13:00 · Online (Zoom)</div>
-                </div>
+                @endforeach
             </div>
-            <!-- Kegiatan 3 -->
-            <div class="flex gap-3 p-2.5 rounded-xl border border-gray-200 hover:border-blue-500 transition">
-                <div class="text-center w-10 shrink-0 border-r border-gray-100 pr-2">
-                    <div class="font-mono font-extrabold text-blue-600 text-lg">10</div>
-                    <div class="text-[0.65rem] text-gray-500">Apr</div>
-                </div>
-                <div>
-                    <div class="text-[0.85rem] font-semibold text-gray-900">Sharing Session: IPO Season</div>
-                    <div class="text-[0.72rem] text-gray-500 mt-0.5">14:00 · Ruang 301 SV IPB</div>
-                </div>
-            </div>
-        </div>
+        @endif
     </div>
 </div>
 
+{{-- ===== TABEL SEMUA KEGIATAN ===== --}}
 <div class="card overflow-hidden">
     <div class="overflow-x-auto">
         <table class="w-full text-left border-collapse text-sm">
             <thead>
                 <tr class="text-gray-500 uppercase tracking-wider border-b border-gray-200 bg-gray-50">
                     <th class="px-4 py-3">Kegiatan</th>
-                    <th class="px-4 py-3">Tipe</th>
                     <th class="px-4 py-3">Tanggal</th>
-                    <th class="px-4 py-3">Waktu</th>
-                    <th class="px-4 py-3">Tempat</th>
-                    <th class="px-4 py-3">PIC</th>
+                    <th class="px-4 py-3">Lokasi</th>
                     <th class="px-4 py-3">Status</th>
                     <th class="px-4 py-3 text-right">Aksi</th>
                 </tr>
             </thead>
             <tbody>
-                <!-- Kegiatan Row 1 -->
+                @forelse($allEvents as $ev)
+                @php
+                    $isPast   = \Carbon\Carbon::parse($ev->event_date)->isPast();
+                    $isToday  = \Carbon\Carbon::parse($ev->event_date)->isToday();
+                    $statusLabel = $isPast  ? 'Selesai'    : ($isToday ? 'Berlangsung' : 'Upcoming');
+                    $statusClass = $isPast  ? 'bg-gray-100 text-gray-600'
+                                 : ($isToday ? 'bg-blue-100 text-blue-800'
+                                             : 'bg-green-100 text-green-800');
+                @endphp
                 <tr class="border-b border-gray-50 hover:bg-blue-50 transition">
                     <td class="px-4 py-3">
-                        <div class="font-semibold text-gray-900">Sekolah Pasar Modal Batch 2</div>
-                        <div class="text-[0.72rem] text-gray-500">SPM untuk anggota baru angkatan 2024...</div>
+                        <div class="font-semibold text-gray-900">{{ $ev->title }}</div>
+                        @if($ev->description)
+                            <div class="text-[0.72rem] text-gray-500 truncate max-w-xs">{{ $ev->description }}</div>
+                        @endif
                     </td>
-                    <td class="px-4 py-3"><span class="bg-purple-100 text-purple-800 px-2.5 py-0.5 rounded-full text-[0.7rem] font-semibold">Seminar</span></td>
-                    <td class="px-4 py-3 font-mono text-[0.8rem]">2025-03-15</td>
-                    <td class="px-4 py-3 text-[0.8rem]">09:00–12:00</td>
-                    <td class="px-4 py-3 text-[0.82rem]">Auditorium SV IPB</td>
-                    <td class="px-4 py-3 text-[0.82rem]">Sari Dewi</td>
-                    <td class="px-4 py-3"><span class="bg-blue-100 text-blue-800 px-2.5 py-0.5 rounded-full text-[0.7rem] font-semibold">Upcoming</span></td>
-                    <td class="px-4 py-3 text-right">
-                        <button class="btn btn-ghost btn-icon btn-sm text-blue-600">✏️</button>
-                        <button class="btn btn-ghost btn-icon btn-sm text-red-500 ml-1">🗑️</button>
+                    <td class="px-4 py-3 font-mono text-[0.8rem]">
+                        {{ \Carbon\Carbon::parse($ev->event_date)->format('d M Y') }}
                     </td>
-                </tr>
-                <!-- Kegiatan Row 2 -->
-                <tr class="border-b border-gray-50 hover:bg-blue-50 transition">
+                    <td class="px-4 py-3 text-[0.82rem]">{{ $ev->location }}</td>
                     <td class="px-4 py-3">
-                        <div class="font-semibold text-gray-900">Workshop Analisis Fundamental</div>
-                        <div class="text-[0.72rem] text-gray-500">Workshop analisis fundamental saham...</div>
+                        <span class="{{ $statusClass }} px-2.5 py-0.5 rounded-full text-[0.7rem] font-semibold">
+                            {{ $statusLabel }}
+                        </span>
                     </td>
-                    <td class="px-4 py-3"><span class="bg-cyan-100 text-cyan-800 px-2.5 py-0.5 rounded-full text-[0.7rem] font-semibold">Workshop</span></td>
-                    <td class="px-4 py-3 font-mono text-[0.8rem]">2025-03-22</td>
-                    <td class="px-4 py-3 text-[0.8rem]">13:00–15:00</td>
-                    <td class="px-4 py-3 text-[0.82rem]">Online (Zoom)</td>
-                    <td class="px-4 py-3 text-[0.82rem]">Andi Prasetyo</td>
-                    <td class="px-4 py-3"><span class="bg-blue-100 text-blue-800 px-2.5 py-0.5 rounded-full text-[0.7rem] font-semibold">Upcoming</span></td>
                     <td class="px-4 py-3 text-right">
                         <button class="btn btn-ghost btn-icon btn-sm text-blue-600">✏️</button>
-                        <button class="btn btn-ghost btn-icon btn-sm text-red-500 ml-1">🗑️</button>
+                        <form action="{{ route('admin.event.destroy', $ev->id) }}" method="POST" class="inline" onsubmit="return confirm('Hapus kegiatan ini?')">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-ghost btn-icon btn-sm text-red-500 ml-1">🗑️</button>
+                        </form>
                     </td>
                 </tr>
-                <!-- Kegiatan Row 3 -->
-                <tr class="border-b border-gray-50 hover:bg-blue-50 transition">
-                    <td class="px-4 py-3">
-                        <div class="font-semibold text-gray-900">Rapat Bulanan Pengurus</div>
-                        <div class="text-[0.72rem] text-gray-500">Evaluasi program kerja bulan Februari...</div>
-                    </td>
-                    <td class="px-4 py-3"><span class="bg-gray-100 text-gray-800 px-2.5 py-0.5 rounded-full text-[0.7rem] font-semibold">Rapat</span></td>
-                    <td class="px-4 py-3 font-mono text-[0.8rem]">2025-03-05</td>
-                    <td class="px-4 py-3 text-[0.8rem]">16:00–18:00</td>
-                    <td class="px-4 py-3 text-[0.82rem]">Ruang 201 SV IPB</td>
-                    <td class="px-4 py-3 text-[0.82rem]">Rizky Firmansyah</td>
-                    <td class="px-4 py-3"><span class="bg-gray-100 text-gray-600 px-2.5 py-0.5 rounded-full text-[0.7rem] font-semibold">Selesai</span></td>
-                    <td class="px-4 py-3 text-right">
-                        <button class="btn btn-ghost btn-icon btn-sm text-blue-600">✏️</button>
-                        <button class="btn btn-ghost btn-icon btn-sm text-red-500 ml-1">🗑️</button>
+                @empty
+                <tr>
+                    <td colspan="5" class="px-4 py-16 text-center">
+                        <div class="flex flex-col items-center gap-3 text-gray-400">
+                            <div class="text-4xl opacity-40">📭</div>
+                            <p class="text-sm font-semibold text-gray-500">Belum ada kegiatan</p>
+                            <p class="text-xs text-gray-400">Tambahkan kegiatan pertama dengan tombol di atas.</p>
+                        </div>
                     </td>
                 </tr>
+                @endforelse
             </tbody>
         </table>
     </div>
 </div>
 
-<!-- MODAL TAMBAH KEGIATAN -->
+{{-- ===== MODAL TAMBAH KEGIATAN ===== --}}
 <div class="modal-overlay fixed inset-0 bg-black/50 z-50 hidden items-center justify-center p-4" id="modal-kegiatan">
     <div class="modal bg-white rounded-2xl p-7 w-full max-w-2xl max-h-[90vh] overflow-y-auto relative">
         <div class="modal-header flex items-center justify-between mb-5 pb-3.5 border-b border-gray-200">
             <div class="modal-title text-base font-bold text-gray-900">Tambah Kegiatan</div>
             <button class="w-8 h-8 rounded-lg bg-gray-100 text-gray-500 hover:bg-red-100 hover:text-red-500 transition flex items-center justify-center" onclick="document.getElementById('modal-kegiatan').classList.remove('open')">✕</button>
         </div>
-        
-        <div class="mb-3.5">
-            <label class="block text-xs font-semibold text-gray-500 mb-1">Nama Kegiatan*</label>
-            <input class="inp" placeholder="Nama kegiatan">
-        </div>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-3.5">
-            <div>
-                <label class="block text-xs font-semibold text-gray-500 mb-1">Tipe*</label>
-                <select class="inp">
-                    <option>Seminar</option><option>Workshop</option><option>Lomba</option><option>Rapat</option><option>Webinar</option><option>Diskusi</option>
-                </select>
+
+        <form action="{{ route('admin.event.store') }}" method="POST">
+            @csrf
+            <div class="mb-3.5">
+                <label class="block text-xs font-semibold text-gray-500 mb-1">Nama Kegiatan*</label>
+                <input class="inp" name="title" placeholder="Nama kegiatan" required>
             </div>
-            <div>
-                <label class="block text-xs font-semibold text-gray-500 mb-1">Tanggal*</label>
-                <input type="date" class="inp">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-3.5">
+                <div>
+                    <label class="block text-xs font-semibold text-gray-500 mb-1">Tanggal*</label>
+                    <input type="date" class="inp" name="event_date" required>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-500 mb-1">Lokasi*</label>
+                    <input class="inp" name="location" placeholder="Lokasi / Link Zoom" required>
+                </div>
             </div>
-        </div>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-3.5">
-            <div><label class="block text-xs font-semibold text-gray-500 mb-1">Waktu Mulai</label><input type="time" class="inp"></div>
-            <div><label class="block text-xs font-semibold text-gray-500 mb-1">Waktu Selesai</label><input type="time" class="inp"></div>
-        </div>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-3.5">
-            <div><label class="block text-xs font-semibold text-gray-500 mb-1">Tempat</label><input class="inp" placeholder="Lokasi / Link Zoom"></div>
-            <div><label class="block text-xs font-semibold text-gray-500 mb-1">PIC / Penanggungjawab</label><input class="inp" placeholder="Nama PIC"></div>
-        </div>
-        <div class="mb-3.5">
-            <label class="block text-xs font-semibold text-gray-500 mb-1">Deskripsi</label>
-            <textarea class="inp" placeholder="Deskripsi singkat kegiatan..." rows="3"></textarea>
-        </div>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-3.5">
-            <div>
-                <label class="block text-xs font-semibold text-gray-500 mb-1">Status</label>
-                <select class="inp">
-                    <option>Upcoming</option><option>Berlangsung</option><option>Selesai</option><option>Dibatalkan</option>
-                </select>
+            <div class="mb-3.5">
+                <label class="block text-xs font-semibold text-gray-500 mb-1">Deskripsi*</label>
+                <textarea class="inp" name="description" placeholder="Deskripsi singkat kegiatan..." rows="3" required></textarea>
             </div>
-            <div><label class="block text-xs font-semibold text-gray-500 mb-1">Kuota Peserta</label><input type="number" class="inp" placeholder="50"></div>
-        </div>
-        <div class="mt-5 pt-4 border-t border-gray-200 flex justify-end gap-2.5">
-            <button class="btn btn-ghost" onclick="document.getElementById('modal-kegiatan').classList.remove('open')">Batal</button>
-            <button class="btn btn-primary" onclick="alert('Kegiatan disimpan!'); document.getElementById('modal-kegiatan').classList.remove('open')">💾 Simpan</button>
-        </div>
+            <div class="mt-5 pt-4 border-t border-gray-200 flex justify-end gap-2.5">
+                <button type="button" class="btn btn-ghost" onclick="document.getElementById('modal-kegiatan').classList.remove('open')">Batal</button>
+                <button type="submit" class="btn btn-primary">💾 Simpan</button>
+            </div>
+        </form>
     </div>
 </div>
 @endsection
 
 @push('styles')
 <style>
-/* Style pembantu agar modal berfungsi saat display:flex disematkan */
 .modal-overlay.open { display: flex !important; }
+.line-clamp-1 { display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; }
+
+/* Pastikan dua kartu atas selalu sama tinggi */
+.grid.lg\:grid-cols-2 > .card { height: 100%; }
 </style>
+@endpush
+
+@push('scripts')
+<script>
+// ===== KALENDER DINAMIS =====
+(function () {
+    // Kumpulkan tanggal event dari DB yang dikirim via PHP
+    const eventDates = @json($allEvents->pluck('event_date')->map(fn($d) => \Carbon\Carbon::parse($d)->format('Y-m-d'))->toArray());
+
+    let current = new Date();
+    current.setDate(1);
+
+    function render() {
+        const year  = current.getFullYear();
+        const month = current.getMonth(); // 0-based
+
+        const monthNames = ['Januari','Februari','Maret','April','Mei','Juni',
+                            'Juli','Agustus','September','Oktober','November','Desember'];
+        document.getElementById('cal-title').textContent = monthNames[month] + ' ' + year;
+
+        const grid      = document.getElementById('cal-grid');
+        const today     = new Date();
+        const firstDay  = new Date(year, month, 1).getDay(); // 0 = Sun
+        const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+        let html = '';
+
+        // Offset kosong sebelum hari pertama
+        for (let i = 0; i < firstDay; i++) {
+            html += '<div></div>';
+        }
+
+        for (let d = 1; d <= daysInMonth; d++) {
+            const dateStr = year + '-'
+                + String(month + 1).padStart(2, '0') + '-'
+                + String(d).padStart(2, '0');
+            const isToday   = (d === today.getDate() && month === today.getMonth() && year === today.getFullYear());
+            const hasEvent  = eventDates.includes(dateStr);
+
+            let cls = 'aspect-square flex flex-col items-center justify-center rounded-lg text-sm cursor-pointer transition relative ';
+            if (isToday) {
+                cls += 'bg-blue-600 text-white font-bold';
+            } else {
+                cls += 'hover:bg-blue-50';
+            }
+
+            const dot = hasEvent
+                ? `<span class="absolute bottom-1 w-1.5 h-1.5 rounded-full ${isToday ? 'bg-white' : 'bg-sky-500'}"></span>`
+                : '';
+
+            html += `<div class="${cls}">${d}${dot}</div>`;
+        }
+
+        grid.innerHTML = html;
+    }
+
+    render();
+
+    // Tombol navigasi bulan
+    document.querySelectorAll('.btn-icon').forEach((btn, idx) => {
+        btn.addEventListener('click', function () {
+            const dir = this.textContent.includes('◀') ? -1 : 1;
+            current.setMonth(current.getMonth() + dir);
+            render();
+        });
+    });
+})();
+</script>
 @endpush

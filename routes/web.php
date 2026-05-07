@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\AdminAuthController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\AnalitikController;
 use App\Http\Controllers\Admin\AnggotaController;
+use App\Http\Controllers\Admin\EventController;
 
 Route::get('/', function () {
     $header = \App\Models\Header::first();
@@ -16,7 +17,6 @@ Route::get('/', function () {
 // ============================================================
 Route::prefix('admin')->name('admin.')->group(function () {
 
-    // Tambahkan ini ↓
     Route::get('/', function () {
         if (auth()->check() && auth()->user()->role === 'admin') {
             return redirect()->route('admin.dashboard');
@@ -40,13 +40,15 @@ Route::prefix('admin')->name('admin.')->middleware('admin.auth')->group(function
 
     // Konten & Data
     Route::get('/anggota', [AnggotaController::class, 'index'])->name('anggota.index');
-    // Rute POST untuk menyimpan data baru (Modal Tambah)
     Route::post('/anggota', [AnggotaController::class, 'store'])->name('anggota.store');
-    // Rute PUT untuk menyimpan data yang diedit (Modal Edit)
     Route::put('/anggota/{id}', [AnggotaController::class, 'update'])->name('anggota.update');
-    // Rute DELETE untuk menghapus data (Modal Hapus)
     Route::delete('/anggota/{id}', [AnggotaController::class, 'destroy'])->name('anggota.destroy');
-    Route::get('/kegiatan', fn() => view('admin.kegiatan'))->name('kegiatan');
+
+    // Kegiatan — menggunakan controller agar data dari DB
+    Route::get('/kegiatan', [EventController::class, 'kegiatanIndex'])->name('kegiatan');
+    Route::post('/kegiatan', [EventController::class, 'store'])->name('event.store');
+    Route::delete('/kegiatan/{id}', [EventController::class, 'destroy'])->name('event.destroy');
+
     Route::get('/lomba', fn() => view('admin.lomba'))->name('lomba');
     Route::get('/riset', fn() => view('admin.riset'))->name('riset');
     Route::get('/pengumuman', fn() => view('admin.pengumuman'))->name('pengumuman');
