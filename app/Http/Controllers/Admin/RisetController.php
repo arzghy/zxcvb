@@ -58,7 +58,7 @@ class RisetController extends Controller
 
             $file = $request->file('file');
             $filename = time() . '_' . $file->getClientOriginalName();
-            $file->storeAs('public/riset', $filename);
+            $file->storeAs('riset', $filename, 'public');
             
             $data['file_path'] = 'storage/riset/' . $filename;
             
@@ -78,5 +78,27 @@ class RisetController extends Controller
         }
         $riset->delete();
         return back()->with('success', 'Riset berhasil dihapus!');
+    }
+
+    // Fungsi khusus untuk membaca PDF langsung dari sistem (Bypass Symlink)
+    public function showPdf($id)
+    {
+        $riset = \App\Models\Riset::findOrFail($id);
+        
+        // Ambil nama filenya saja (misal: 12345_file.pdf)
+        $namaFile = basename($riset->file_path);
+
+        // 1. Cek apakah file ada menggunakan sistem internal Laravel
+        if (!\Illuminate\Support\Facades\Storage::disk('public')->exists('riset/' . $namaFile)) {
+            // Jika file benar-benar hilang, munculkan pesan teks ini (bukan 404)
+            return "GAGAL: File (" . $namaFile . ") tidak tersimpan di laptop. Silakan hapus data ini di tabel dan coba upload ulang.";
+        }
+
+        // 2. Jika ada, baca file langsung dari memori dan paksa browser menampilkan PDF
+        $file = \Illuminate\Support\Facades\Storage::disk('public')->get('riset/' . $namaFile);
+        
+        return response($file, 200)
+            ->header('Content-Type', 'application/pdf')
+            ->header('Content-Disposition', 'inline; filename="' . $namaFile . '"');
     }
 }

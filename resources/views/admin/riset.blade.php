@@ -78,7 +78,7 @@
                 <div class="flex gap-1.5">
                     @if($rs->file_path)
                         {{-- Kembalikan ke asset() untuk percobaan normal, atau ganti ke route('buka.pdf') jika pakai VVIP --}}
-                        <a href="{{ asset($rs->file_path) }}" target="_blank" class="btn btn-ghost bg-gray-50 hover:bg-green-50 text-green-600 border border-gray-200 hover:border-green-200 btn-sm px-3" title="Buka PDF">👁️ Lihat</a>
+                        <a href="{{ route('admin.riset.pdf', $rs->id) }}" target="_blank" class="btn btn-ghost bg-gray-50 hover:bg-green-50 text-green-600 border border-gray-200 hover:border-green-200 btn-sm px-3" title="Buka PDF">👁️ Lihat</a>
                     @endif
                     <button type="button" class="btn btn-ghost bg-gray-50 hover:bg-blue-50 text-blue-600 border border-gray-200 hover:border-blue-200 btn-sm btn-edit px-2.5" data-riset="{{ json_encode($rs) }}">✏️ Edit</button>
                     <button type="button" class="btn btn-ghost bg-gray-50 hover:bg-red-50 text-red-500 border border-gray-200 hover:border-red-200 btn-sm btn-delete-trigger px-2.5" data-url="{{ route('admin.riset.destroy', $rs->id) }}" data-title="{{ $rs->title }}">🗑️</button>

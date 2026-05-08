@@ -8,6 +8,8 @@ use App\Http\Controllers\Admin\AnggotaController;
 use App\Http\Controllers\Admin\EventController;
 use App\Http\Controllers\Admin\LombaController;
 use App\Http\Controllers\Admin\RisetController;
+use App\Http\Controllers\Admin\AnnouncementController;
+use App\Http\Controllers\Admin\HomeContentController;
 
 Route::get('/', function () {
     $header = \App\Models\Header::first();
@@ -63,15 +65,21 @@ Route::prefix('admin')->name('admin.')->middleware('admin.auth')->group(function
     Route::post('/riset', [RisetController::class, 'store'])->name('riset.store');
     Route::put('/riset/{id}', [RisetController::class, 'update'])->name('riset.update');
     Route::delete('/riset/{id}', [RisetController::class, 'destroy'])->name('riset.destroy');
+    Route::get('/riset/pdf/{id}', [RisetController::class, 'showPdf'])->name('riset.pdf');
 
-    Route::get('/pengumuman', fn() => view('admin.pengumuman'))->name('pengumuman');
-
-    // Fitur Esensial
-    Route::get('/faq', fn() => view('admin.faq'))->name('faq');
-    Route::get('/reviews', fn() => view('admin.reviews'))->name('reviews');
+    // Routes untuk Pengumuman
+    Route::get('/pengumuman', [AnnouncementController::class, 'index'])->name('pengumuman.index');
+    Route::post('/pengumuman', [AnnouncementController::class, 'store'])->name('pengumuman.store');
+    Route::put('/pengumuman/{id}', [AnnouncementController::class, 'update'])->name('pengumuman.update');
+    Route::delete('/pengumuman/{id}', [AnnouncementController::class, 'destroy'])->name('pengumuman.destroy');
 
     // Halaman Landing
-    Route::get('/home-content', fn() => view('admin.home_content'))->name('home_content');
+    // Routes untuk Home Content
+    Route::get('/home-content', [HomeContentController::class, 'index'])->name('home_content.index');
+    Route::post('/home-content/save', [HomeContentController::class, 'saveContent'])->name('home_content.save');
+    Route::post('/home-content/ticker', [HomeContentController::class, 'saveTicker'])->name('ticker.save');
+    Route::delete('/home-content/ticker/{id}', [HomeContentController::class, 'destroyTicker'])->name('ticker.destroy');
+
     Route::get('/about-us', fn() => view('admin.about_us.edit'))->name('about_us.edit');
     Route::get('/gallery', fn() => view('admin.gallery'))->name('gallery');
     Route::get('/rekrutmen', fn() => view('admin.rekrutmen'))->name('rekrutmen');
@@ -85,16 +93,3 @@ Route::prefix('admin')->name('admin.')->middleware('admin.auth')->group(function
     // Pengaturan
     Route::get('/pengaturan', fn() => view('admin.pengaturan'))->name('pengaturan');
 });
-
-// Tambahkan ini di BARIS PALING BAWAH routes/web.php
-Route::get('/buka-pdf/{filename}', function ($filename) {
-    // Jalur absolut ke gudang storage
-    $path = storage_path('app/public/riset/' . $filename);
-
-    if (!file_exists($path)) {
-        // Jika 404 muncul dengan pesan ini, berarti jalurnya sudah benar tapi filenya tidak ada di folder
-        abort(404, "File tidak ditemukan di: " . $path);
-    }
-
-    return response()->file($path);
-})->name('buka.pdf')->where('filename', '.*'); // Penting: agar bisa membaca .pdf

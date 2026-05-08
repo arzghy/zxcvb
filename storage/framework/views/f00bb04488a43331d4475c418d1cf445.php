@@ -84,7 +84,7 @@
                 <div class="flex gap-1.5">
                     <?php if($rs->file_path): ?>
                         
-                        <a href="<?php echo e(asset($rs->file_path)); ?>" target="_blank" class="btn btn-ghost bg-gray-50 hover:bg-green-50 text-green-600 border border-gray-200 hover:border-green-200 btn-sm px-3" title="Buka PDF">👁️ Lihat</a>
+                        <a href="<?php echo e(route('admin.riset.pdf', $rs->id)); ?>" target="_blank" class="btn btn-ghost bg-gray-50 hover:bg-green-50 text-green-600 border border-gray-200 hover:border-green-200 btn-sm px-3" title="Buka PDF">👁️ Lihat</a>
                     <?php endif; ?>
                     <button type="button" class="btn btn-ghost bg-gray-50 hover:bg-blue-50 text-blue-600 border border-gray-200 hover:border-blue-200 btn-sm btn-edit px-2.5" data-riset="<?php echo e(json_encode($rs)); ?>">✏️ Edit</button>
                     <button type="button" class="btn btn-ghost bg-gray-50 hover:bg-red-50 text-red-500 border border-gray-200 hover:border-red-200 btn-sm btn-delete-trigger px-2.5" data-url="<?php echo e(route('admin.riset.destroy', $rs->id)); ?>" data-title="<?php echo e($rs->title); ?>">🗑️</button>
