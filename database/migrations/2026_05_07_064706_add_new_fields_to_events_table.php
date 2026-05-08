@@ -1,0 +1,27 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    public function up(): void
+    {
+        Schema::table('events', function (Blueprint $table) {
+            $table->string('type')->nullable()->after('title');
+            $table->time('start_time')->nullable()->after('event_date');
+            $table->time('end_time')->nullable()->after('start_time');
+            $table->string('pic')->nullable()->after('location');
+            $table->string('status')->default('Upcoming')->after('description');
+            $table->integer('quota')->nullable()->after('status');
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::table('events', function (Blueprint $table) {
+            $table->dropColumn(['type', 'start_time', 'end_time', 'pic', 'status', 'quota']);
+        });
+    }
+};

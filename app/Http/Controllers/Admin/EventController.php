@@ -26,12 +26,26 @@ class EventController extends Controller
     public function store(Request $request) {
         $request->validate([
             'title' => 'required|string|max:255',
-            'description' => 'required|string',
             'event_date' => 'required|date',
             'location' => 'required|string|max:255',
         ]);
+        
         Event::create($request->all());
         return back()->with('success', 'Event berhasil ditambahkan!');
+    }
+
+    // Tambahkan fungsi update ini
+    public function update(Request $request, $id) {
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'event_date' => 'required|date',
+            'location' => 'required|string|max:255',
+        ]);
+
+        $event = Event::findOrFail($id);
+        $event->update($request->all());
+        
+        return back()->with('success', 'Event berhasil diupdate!');
     }
 
     public function destroy($id) {

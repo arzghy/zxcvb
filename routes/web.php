@@ -6,6 +6,8 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\AnalitikController;
 use App\Http\Controllers\Admin\AnggotaController;
 use App\Http\Controllers\Admin\EventController;
+use App\Http\Controllers\Admin\LombaController;
+use App\Http\Controllers\Admin\RisetController;
 
 Route::get('/', function () {
     $header = \App\Models\Header::first();
@@ -47,10 +49,21 @@ Route::prefix('admin')->name('admin.')->middleware('admin.auth')->group(function
     // Kegiatan — menggunakan controller agar data dari DB
     Route::get('/kegiatan', [EventController::class, 'kegiatanIndex'])->name('kegiatan');
     Route::post('/kegiatan', [EventController::class, 'store'])->name('event.store');
+    Route::put('/kegiatan/{id}', [EventController::class, 'update'])->name('event.update');
     Route::delete('/kegiatan/{id}', [EventController::class, 'destroy'])->name('event.destroy');
 
-    Route::get('/lomba', fn() => view('admin.lomba'))->name('lomba');
-    Route::get('/riset', fn() => view('admin.riset'))->name('riset');
+    // Routes untuk Lomba
+    Route::get('/lomba', [LombaController::class, 'index'])->name('lomba.index');
+    Route::post('/lomba', [LombaController::class, 'store'])->name('lomba.store');
+    Route::put('/lomba/{id}', [LombaController::class, 'update'])->name('lomba.update');
+    Route::delete('/lomba/{id}', [LombaController::class, 'destroy'])->name('lomba.destroy');
+
+    // Routes untuk Riset & Publikasi
+    Route::get('/riset', [RisetController::class, 'index'])->name('riset.index');
+    Route::post('/riset', [RisetController::class, 'store'])->name('riset.store');
+    Route::put('/riset/{id}', [RisetController::class, 'update'])->name('riset.update');
+    Route::delete('/riset/{id}', [RisetController::class, 'destroy'])->name('riset.destroy');
+
     Route::get('/pengumuman', fn() => view('admin.pengumuman'))->name('pengumuman');
 
     // Fitur Esensial
@@ -72,3 +85,16 @@ Route::prefix('admin')->name('admin.')->middleware('admin.auth')->group(function
     // Pengaturan
     Route::get('/pengaturan', fn() => view('admin.pengaturan'))->name('pengaturan');
 });
+
+// Tambahkan ini di BARIS PALING BAWAH routes/web.php
+Route::get('/buka-pdf/{filename}', function ($filename) {
+    // Jalur absolut ke gudang storage
+    $path = storage_path('app/public/riset/' . $filename);
+
+    if (!file_exists($path)) {
+        // Jika 404 muncul dengan pesan ini, berarti jalurnya sudah benar tapi filenya tidak ada di folder
+        abort(404, "File tidak ditemukan di: " . $path);
+    }
+
+    return response()->file($path);
+})->name('buka.pdf')->where('filename', '.*'); // Penting: agar bisa membaca .pdf

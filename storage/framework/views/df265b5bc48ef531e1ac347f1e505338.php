@@ -1,9 +1,9 @@
-@extends('layouts.admin')
 
-@section('page-title', 'Info Lomba')
-@section('page-breadcrumb', 'Kelola Lomba')
 
-@section('content')
+<?php $__env->startSection('page-title', 'Info Lomba'); ?>
+<?php $__env->startSection('page-breadcrumb', 'Kelola Lomba'); ?>
+
+<?php $__env->startSection('content'); ?>
 <div class="section-header flex items-center justify-between mb-5 mt-2 gap-3 flex-wrap">
     <div>
         <div class="section-title text-lg font-bold text-gray-900">Data Perlombaan</div>
@@ -28,88 +28,93 @@
     </div>
 </div>
 
-{{-- ===== GRID DATA LOMBA (Berbasis Card UI) ===== --}}
+
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5" id="lomba-grid">
-    @forelse($lombas as $lm)
-        @php
+    <?php $__empty_1 = true; $__currentLoopData = $lombas; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $lm): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+        <?php
             $statusClass = match($lm->status) {
                 'Buka' => 'bg-green-100 text-green-800',
                 'Segera Tutup' => 'bg-yellow-100 text-yellow-800',
                 'Tutup' => 'bg-red-100 text-red-800',
                 default => 'bg-gray-100 text-gray-800',
             };
-        @endphp
+        ?>
         
-        <div class="card bg-white p-5 rounded-2xl border border-gray-200 hover:border-blue-300 hover:shadow-md transition relative flex flex-col h-full lomba-card-item" data-category="{{ strtolower($lm->category) }}">
-            {{-- Status Badge --}}
+        <div class="card bg-white p-5 rounded-2xl border border-gray-200 hover:border-blue-300 hover:shadow-md transition relative flex flex-col h-full lomba-card-item" data-category="<?php echo e(strtolower($lm->category)); ?>">
+            
             <div class="absolute top-5 right-5">
-                <span class="px-2.5 py-1 rounded-full text-[0.65rem] font-bold uppercase tracking-wider {{ $statusClass }}">
-                    {{ $lm->status }}
+                <span class="px-2.5 py-1 rounded-full text-[0.65rem] font-bold uppercase tracking-wider <?php echo e($statusClass); ?>">
+                    <?php echo e($lm->status); ?>
+
                 </span>
             </div>
 
-            {{-- Icon & Kategori --}}
+            
             <div class="flex items-center gap-2 mb-3">
                 <span class="text-2xl">🏆</span>
                 <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-100">
-                    {{ $lm->category }}
+                    <?php echo e($lm->category); ?>
+
                 </span>
             </div>
 
-            {{-- Judul Lomba --}}
+            
             <div class="font-bold text-[1.05rem] text-gray-900 mb-1 pr-16 leading-tight">
-                {{ $lm->title }}
-                @if(!$lm->is_published)
+                <?php echo e($lm->title); ?>
+
+                <?php if(!$lm->is_published): ?>
                     <span class="text-[0.65rem] bg-gray-100 text-gray-500 px-1.5 py-0.5 rounded ml-1 font-normal align-middle">Draft</span>
-                @endif
+                <?php endif; ?>
             </div>
             
-            {{-- Penyelenggara --}}
-            <div class="text-[0.8rem] text-gray-500 mb-4">{{ $lm->organizer }}</div>
+            
+            <div class="text-[0.8rem] text-gray-500 mb-4"><?php echo e($lm->organizer); ?></div>
 
-            {{-- Meta Info --}}
+            
             <div class="flex flex-col gap-1.5 mb-4 text-[0.8rem] text-gray-700">
                 <div class="flex items-start gap-2">
                     <span>📅</span>
                     <span>Deadline: 
-                        <strong class="{{ \Carbon\Carbon::parse($lm->registration_deadline)->isPast() ? 'text-red-500' : '' }}">
-                            {{ \Carbon\Carbon::parse($lm->registration_deadline)->format('d M Y') }}
+                        <strong class="<?php echo e(\Carbon\Carbon::parse($lm->registration_deadline)->isPast() ? 'text-red-500' : ''); ?>">
+                            <?php echo e(\Carbon\Carbon::parse($lm->registration_deadline)->format('d M Y')); ?>
+
                         </strong>
                     </span>
                 </div>
                 <div class="flex items-start gap-2">
                     <span>🌍</span>
-                    <span>Tingkat: <strong>{{ $lm->level ?? '-' }}</strong></span>
+                    <span>Tingkat: <strong><?php echo e($lm->level ?? '-'); ?></strong></span>
                 </div>
                 <div class="flex items-start gap-2">
                     <span>💰</span>
-                    <span>Hadiah: <strong class="text-green-600">{{ $lm->prize ?? '-' }}</strong></span>
+                    <span>Hadiah: <strong class="text-green-600"><?php echo e($lm->prize ?? '-'); ?></strong></span>
                 </div>
             </div>
 
-            {{-- Deskripsi Lomba (Truncated) --}}
+            
             <div class="text-[0.8rem] text-gray-500 mb-5 line-clamp-2 flex-1 leading-relaxed">
-                {{ $lm->description ?: 'Tidak ada deskripsi.' }}
+                <?php echo e($lm->description ?: 'Tidak ada deskripsi.'); ?>
+
             </div>
 
-            {{-- Action Buttons --}}
+            
             <div class="flex gap-2 flex-wrap mt-auto pt-4 border-t border-gray-100">
-                @if($lm->registration_link)
-                    <a href="{{ $lm->registration_link }}" target="_blank" class="btn btn-primary btn-sm flex-1 justify-center text-center">🔗 Daftar</a>
-                @endif
-                <button type="button" class="btn btn-ghost bg-gray-50 hover:bg-gray-100 border border-gray-200 btn-sm btn-edit flex-1 justify-center" data-lomba="{{ json_encode($lm) }}">✏️ Edit</button>
-                <button type="button" class="btn btn-ghost bg-red-50 hover:bg-red-100 text-red-500 border border-red-100 btn-sm btn-delete-trigger px-3" data-url="{{ route('admin.lomba.destroy', $lm->id) }}" data-title="{{ $lm->title }}">🗑️</button>
+                <?php if($lm->registration_link): ?>
+                    <a href="<?php echo e($lm->registration_link); ?>" target="_blank" class="btn btn-primary btn-sm flex-1 justify-center text-center">🔗 Daftar</a>
+                <?php endif; ?>
+                <button type="button" class="btn btn-ghost bg-gray-50 hover:bg-gray-100 border border-gray-200 btn-sm btn-edit flex-1 justify-center" data-lomba="<?php echo e(json_encode($lm)); ?>">✏️ Edit</button>
+                <button type="button" class="btn btn-ghost bg-red-50 hover:bg-red-100 text-red-500 border border-red-100 btn-sm btn-delete-trigger px-3" data-url="<?php echo e(route('admin.lomba.destroy', $lm->id)); ?>" data-title="<?php echo e($lm->title); ?>">🗑️</button>
             </div>
         </div>
-    @empty
+    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
         <div id="empty-db" class="col-span-full bg-white p-16 rounded-2xl border border-gray-200 flex flex-col items-center justify-center text-center">
             <div class="text-4xl opacity-40 mb-3">🏆</div>
             <p class="text-sm font-semibold text-gray-500">Belum ada data lomba</p>
             <p class="text-xs text-gray-400 mt-1">Tambahkan lomba baru dengan tombol "+ Tambah Lomba"</p>
         </div>
-    @endforelse
+    <?php endif; ?>
 
-    {{-- State Pencarian Kosong --}}
+    
     <div id="empty-state" style="display: none;" class="col-span-full bg-white p-16 rounded-2xl border border-gray-200 flex flex-col items-center justify-center text-center">
         <div class="text-4xl opacity-40 mb-3">📭</div>
         <p class="text-sm font-semibold text-gray-500">Lomba tidak tersedia</p>
@@ -117,15 +122,15 @@
     </div>
 </div>
 
-{{-- ===== MODAL TAMBAH LOMBA ===== --}}
+
 <div class="modal-overlay fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden items-center justify-center p-4" id="modal-tambah-lomba">
     <div class="modal bg-white rounded-2xl p-7 w-full max-w-2xl max-h-[90vh] overflow-y-auto relative">
         <div class="modal-header flex items-center justify-between mb-5 pb-3.5 border-b border-gray-200">
             <div class="modal-title text-base font-bold text-gray-900">Tambah Info Lomba</div>
             <button class="w-8 h-8 rounded-lg bg-gray-100 text-gray-500 hover:bg-red-100 hover:text-red-500 transition flex items-center justify-center" onclick="closeModal('modal-tambah-lomba')">✕</button>
         </div>
-        <form action="{{ route('admin.lomba.store') }}" method="POST">
-            @csrf
+        <form action="<?php echo e(route('admin.lomba.store')); ?>" method="POST">
+            <?php echo csrf_field(); ?>
             
             <div class="mb-3.5">
                 <label class="block text-xs font-semibold text-gray-500 mb-1">Nama Lomba*</label>
@@ -220,7 +225,7 @@
     </div>
 </div>
 
-{{-- ===== MODAL EDIT LOMBA ===== --}}
+
 <div class="modal-overlay fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden items-center justify-center p-4" id="modal-edit-lomba">
     <div class="modal bg-white rounded-2xl p-7 w-full max-w-2xl max-h-[90vh] overflow-y-auto relative">
         <div class="modal-header flex items-center justify-between mb-5 pb-3.5 border-b border-gray-200">
@@ -228,8 +233,8 @@
             <button class="w-8 h-8 rounded-lg bg-gray-100 text-gray-500 hover:bg-red-100 hover:text-red-500 transition flex items-center justify-center" onclick="closeModal('modal-edit-lomba')">✕</button>
         </div>
         <form id="form-edit-lomba" method="POST">
-            @csrf
-            @method('PUT')
+            <?php echo csrf_field(); ?>
+            <?php echo method_field('PUT'); ?>
             
             <div class="mb-3.5">
                 <label class="block text-xs font-semibold text-gray-500 mb-1">Nama Lomba*</label>
@@ -324,7 +329,7 @@
     </div>
 </div>
 
-{{-- ===== MODAL DELETE CONFIRM ===== --}}
+
 <div class="modal-overlay fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden items-center justify-center p-4" id="modal-delete">
     <div class="modal bg-white rounded-2xl p-8 w-full max-w-[400px] text-center relative">
         <div class="text-5xl mb-4">🗑️</div>
@@ -332,8 +337,8 @@
         <div class="text-sm text-gray-500 mb-6" id="delete-msg">Data lomba ini akan dihapus permanen.</div>
         
         <form id="form-delete-lomba" method="POST">
-            @csrf
-            @method('DELETE')
+            <?php echo csrf_field(); ?>
+            <?php echo method_field('DELETE'); ?>
             <div class="flex gap-2.5 justify-center">
                 <button type="button" class="btn btn-ghost" onclick="closeModal('modal-delete')">Batal</button>
                 <button type="submit" class="btn bg-red-500 hover:bg-red-600 text-white px-5 py-2 rounded-xl font-semibold transition">🗑️ Hapus</button>
@@ -342,9 +347,9 @@
     </div>
 </div>
 
-@endsection
+<?php $__env->stopSection(); ?>
 
-@push('styles')
+<?php $__env->startPush('styles'); ?>
 <style>
     .modal-overlay.open { display: flex !important; }
     .line-clamp-2 {
@@ -354,9 +359,9 @@
         overflow: hidden;
     }
 </style>
-@endpush
+<?php $__env->stopPush(); ?>
 
-@push('scripts')
+<?php $__env->startPush('scripts'); ?>
 <script>
     function openModal(id) { document.getElementById(id).classList.add('open'); }
     function closeModal(id) { document.getElementById(id).classList.remove('open'); }
@@ -450,4 +455,5 @@
     searchInput.addEventListener('input', filterLomba);
     filterType.addEventListener('change', filterLomba);
 </script>
-@endpush
+<?php $__env->stopPush(); ?>
+<?php echo $__env->make('layouts.admin', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH D:\kspm-sisfor\zxcvb\resources\views/admin/lomba.blade.php ENDPATH**/ ?>

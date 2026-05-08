@@ -1,9 +1,9 @@
-@extends('layouts.admin')
 
-@section('page-title', 'Pusat Riset')
-@section('page-breadcrumb', 'Kelola Riset')
 
-@section('content')
+<?php $__env->startSection('page-title', 'Pusat Riset'); ?>
+<?php $__env->startSection('page-breadcrumb', 'Kelola Riset'); ?>
+
+<?php $__env->startSection('content'); ?>
 <div class="section-header flex items-center justify-between mb-5 mt-2 gap-3 flex-wrap">
     <div>
         <div class="section-title text-lg font-bold text-gray-900">Riset & Publikasi</div>
@@ -26,75 +26,81 @@
     </div>
 </div>
 
-{{-- ===== LIST DATA RISET (RESPONSIF) ===== --}}
+
 <div class="flex flex-col gap-3.5" id="riset-list">
-    @forelse($risets as $rs)
-        @php
+    <?php $__empty_1 = true; $__currentLoopData = $risets; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $rs): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+        <?php
             $statusClass = match($rs->status) {
                 'Publik' => 'bg-green-100 text-green-800',
                 'Terbatas' => 'bg-yellow-100 text-yellow-800',
                 'Draft' => 'bg-gray-100 text-gray-600',
                 default => 'bg-gray-100 text-gray-800',
             };
-        @endphp
+        ?>
         
-        <div class="bg-white border border-gray-200 rounded-2xl p-4 sm:p-5 hover:border-blue-300 hover:shadow-sm transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-4 riset-card-item" data-category="{{ strtolower($rs->category) }}">
+        <div class="bg-white border border-gray-200 rounded-2xl p-4 sm:p-5 hover:border-blue-300 hover:shadow-sm transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-4 riset-card-item" data-category="<?php echo e(strtolower($rs->category)); ?>">
             
-            {{-- Bagian Kiri: Icon & Info --}}
+            
             <div class="flex items-start gap-4 w-full sm:w-auto overflow-hidden">
                 <div class="w-12 h-12 rounded-xl bg-blue-50 text-blue-500 flex items-center justify-center text-2xl shrink-0 border border-blue-100">
                     📄
                 </div>
                 <div class="min-w-0 flex-1">
                     <div class="font-bold text-gray-900 text-[1.05rem] mb-1.5 truncate pr-2">
-                        {{ $rs->title }}
+                        <?php echo e($rs->title); ?>
+
                     </div>
                     <div class="flex flex-wrap items-center gap-2 text-[0.75rem]">
                         <span class="px-2 py-0.5 rounded-md bg-blue-50 text-blue-700 font-bold border border-blue-100 shrink-0">
-                            {{ $rs->category }}
+                            <?php echo e($rs->category); ?>
+
                         </span>
                         <span class="text-gray-300 hidden sm:inline">•</span>
                         <span class="text-gray-600 font-medium flex items-center gap-1 shrink-0">
-                            👤 {{ $rs->author ?? '-' }}
+                            👤 <?php echo e($rs->author ?? '-'); ?>
+
                         </span>
                         <span class="text-gray-300 hidden sm:inline">•</span>
                         <span class="text-gray-500 flex items-center gap-1 shrink-0">
-                            📅 {{ $rs->release_date ? \Carbon\Carbon::parse($rs->release_date)->format('d M Y') : '-' }}
+                            📅 <?php echo e($rs->release_date ? \Carbon\Carbon::parse($rs->release_date)->format('d M Y') : '-'); ?>
+
                         </span>
                         <span class="text-gray-300 hidden sm:inline">•</span>
                         <span class="text-gray-500 font-mono shrink-0 text-[0.7rem]">
-                            💾 {{ $rs->file_size ?? 'Auto' }}
+                            💾 <?php echo e($rs->file_size ?? 'Auto'); ?>
+
                         </span>
                     </div>
                 </div>
             </div>
 
-            {{-- Bagian Kanan: Status & Tombol Aksi --}}
+            
             <div class="flex flex-row sm:flex-col items-center sm:items-end justify-between sm:justify-center gap-3 w-full sm:w-auto mt-2 sm:mt-0 pt-3 sm:pt-0 border-t sm:border-t-0 border-gray-100 shrink-0">
-                <span class="{{ $statusClass }} px-2.5 py-1 rounded-full text-[0.65rem] font-bold uppercase tracking-wider">
-                    {{ $rs->status }}
+                <span class="<?php echo e($statusClass); ?> px-2.5 py-1 rounded-full text-[0.65rem] font-bold uppercase tracking-wider">
+                    <?php echo e($rs->status); ?>
+
                 </span>
                 
                 <div class="flex gap-1.5">
-                    @if($rs->file_path)
-                        {{-- Kembalikan ke asset() untuk percobaan normal, atau ganti ke route('buka.pdf') jika pakai VVIP --}}
-                        <a href="{{ asset($rs->file_path) }}" target="_blank" class="btn btn-ghost bg-gray-50 hover:bg-green-50 text-green-600 border border-gray-200 hover:border-green-200 btn-sm px-3" title="Buka PDF">👁️ Lihat</a>
-                    @endif
-                    <button type="button" class="btn btn-ghost bg-gray-50 hover:bg-blue-50 text-blue-600 border border-gray-200 hover:border-blue-200 btn-sm btn-edit px-2.5" data-riset="{{ json_encode($rs) }}">✏️ Edit</button>
-                    <button type="button" class="btn btn-ghost bg-gray-50 hover:bg-red-50 text-red-500 border border-gray-200 hover:border-red-200 btn-sm btn-delete-trigger px-2.5" data-url="{{ route('admin.riset.destroy', $rs->id) }}" data-title="{{ $rs->title }}">🗑️</button>
+                    <?php if($rs->file_path): ?>
+                        
+                        <a href="<?php echo e(asset($rs->file_path)); ?>" target="_blank" class="btn btn-ghost bg-gray-50 hover:bg-green-50 text-green-600 border border-gray-200 hover:border-green-200 btn-sm px-3" title="Buka PDF">👁️ Lihat</a>
+                    <?php endif; ?>
+                    <button type="button" class="btn btn-ghost bg-gray-50 hover:bg-blue-50 text-blue-600 border border-gray-200 hover:border-blue-200 btn-sm btn-edit px-2.5" data-riset="<?php echo e(json_encode($rs)); ?>">✏️ Edit</button>
+                    <button type="button" class="btn btn-ghost bg-gray-50 hover:bg-red-50 text-red-500 border border-gray-200 hover:border-red-200 btn-sm btn-delete-trigger px-2.5" data-url="<?php echo e(route('admin.riset.destroy', $rs->id)); ?>" data-title="<?php echo e($rs->title); ?>">🗑️</button>
                 </div>
             </div>
             
         </div>
-    @empty
+    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
         <div id="empty-db" class="bg-white p-16 rounded-2xl border border-gray-200 flex flex-col items-center justify-center text-center">
             <div class="text-4xl opacity-40 mb-3">📄</div>
             <p class="text-sm font-semibold text-gray-500">Belum ada data publikasi riset</p>
             <p class="text-xs text-gray-400 mt-1">Tambahkan riset baru dengan tombol "+ Upload Riset"</p>
         </div>
-    @endforelse
+    <?php endif; ?>
 
-    {{-- State Pencarian Kosong --}}
+    
     <div id="empty-state" style="display: none;" class="bg-white p-16 rounded-2xl border border-gray-200 flex-col items-center justify-center text-center">
         <div class="text-4xl opacity-40 mb-3">📭</div>
         <p class="text-sm font-semibold text-gray-500">Riset tidak tersedia</p>
@@ -102,15 +108,15 @@
     </div>
 </div>
 
-{{-- ===== MODAL TAMBAH RISET ===== --}}
+
 <div class="modal-overlay fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden items-center justify-center p-4" id="modal-tambah-riset">
     <div class="modal bg-white rounded-2xl p-7 w-full max-w-lg relative">
         <div class="modal-header flex items-center justify-between mb-5 pb-3.5 border-b border-gray-200">
             <div class="modal-title text-base font-bold text-gray-900">Upload Riset</div>
             <button class="w-8 h-8 rounded-lg bg-gray-100 text-gray-500 hover:bg-red-100 hover:text-red-500 transition flex items-center justify-center" onclick="closeModal('modal-tambah-riset')">✕</button>
         </div>
-        <form action="{{ route('admin.riset.store') }}" method="POST" enctype="multipart/form-data" id="form-tambah-riset">
-            @csrf
+        <form action="<?php echo e(route('admin.riset.store')); ?>" method="POST" enctype="multipart/form-data" id="form-tambah-riset">
+            <?php echo csrf_field(); ?>
             <div class="mb-3.5">
                 <label class="block text-xs font-semibold text-gray-500 mb-1">Judul Riset*</label>
                 <input class="inp" name="title" required placeholder="Judul dokumen riset">
@@ -142,7 +148,7 @@
                 </div>
             </div>
 
-            {{-- INTERAKTIF UPLOAD AREA --}}
+            
             <div class="mb-4">
                 <label class="block text-xs font-semibold text-gray-500 mb-1">File Dokumen PDF</label>
                 <div id="drop-area-tambah" class="border-2 border-dashed border-gray-300 rounded-xl p-6 text-center hover:bg-gray-50 transition duration-300 relative overflow-hidden group">
@@ -179,7 +185,7 @@
     </div>
 </div>
 
-{{-- ===== MODAL EDIT RISET ===== --}}
+
 <div class="modal-overlay fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden items-center justify-center p-4" id="modal-edit-riset">
     <div class="modal bg-white rounded-2xl p-7 w-full max-w-lg relative">
         <div class="modal-header flex items-center justify-between mb-5 pb-3.5 border-b border-gray-200">
@@ -187,8 +193,8 @@
             <button class="w-8 h-8 rounded-lg bg-gray-100 text-gray-500 hover:bg-red-100 hover:text-red-500 transition flex items-center justify-center" onclick="closeModal('modal-edit-riset')">✕</button>
         </div>
         <form id="form-edit-riset" method="POST" enctype="multipart/form-data">
-            @csrf
-            @method('PUT')
+            <?php echo csrf_field(); ?>
+            <?php echo method_field('PUT'); ?>
             <div class="mb-3.5">
                 <label class="block text-xs font-semibold text-gray-500 mb-1">Judul Riset*</label>
                 <input class="inp" name="title" id="edit-title" required>
@@ -220,7 +226,7 @@
                 </div>
             </div>
 
-            {{-- INTERAKTIF UPLOAD AREA EDIT --}}
+            
             <div class="mb-4">
                 <label class="block text-xs font-semibold text-gray-500 mb-1">Ganti Dokumen PDF (Opsional)</label>
                 <div id="drop-area-edit" class="border-2 border-dashed border-gray-300 rounded-xl p-6 text-center hover:bg-gray-50 transition duration-300 relative overflow-hidden group">
@@ -255,7 +261,7 @@
     </div>
 </div>
 
-{{-- ===== MODAL DELETE CONFIRM ===== --}}
+
 <div class="modal-overlay fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden items-center justify-center p-4" id="modal-delete">
     <div class="modal bg-white rounded-2xl p-8 w-full max-w-[400px] text-center relative">
         <div class="text-5xl mb-4">🗑️</div>
@@ -263,8 +269,8 @@
         <div class="text-sm text-gray-500 mb-6" id="delete-msg">Dokumen riset ini akan dihapus permanen.</div>
         
         <form id="form-delete-riset" method="POST">
-            @csrf
-            @method('DELETE')
+            <?php echo csrf_field(); ?>
+            <?php echo method_field('DELETE'); ?>
             <div class="flex gap-2.5 justify-center">
                 <button type="button" class="btn btn-ghost" onclick="closeModal('modal-delete')">Batal</button>
                 <button type="submit" class="btn bg-red-500 hover:bg-red-600 text-white px-5 py-2 rounded-xl font-semibold transition">🗑️ Hapus</button>
@@ -273,15 +279,15 @@
     </div>
 </div>
 
-@endsection
+<?php $__env->stopSection(); ?>
 
-@push('styles')
+<?php $__env->startPush('styles'); ?>
 <style>
     .modal-overlay.open { display: flex !important; }
 </style>
-@endpush
+<?php $__env->stopPush(); ?>
 
-@push('scripts')
+<?php $__env->startPush('scripts'); ?>
 <script>
     function openModal(id) { 
         document.getElementById(id).classList.add('open'); 
@@ -407,4 +413,5 @@
     searchInput.addEventListener('input', filterRiset);
     filterType.addEventListener('change', filterRiset);
 </script>
-@endpush
+<?php $__env->stopPush(); ?>
+<?php echo $__env->make('layouts.admin', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH D:\kspm-sisfor\zxcvb\resources\views/admin/riset.blade.php ENDPATH**/ ?>
